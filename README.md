@@ -4,8 +4,10 @@ get up to speed on python with koans test driven learning
 to run tests:
 read README.rst
 
-## Setup and run first test:
+## Setup and run first test for (python 3):
 ```
+$ cd /lang/python/repos/                    # repo directory
+$ git clone https://github.com/gregmalcolm/python_koans
 $ cd python3                                # to do the python3 test suite
 $ python3 -m venv venv                      # setup environment
 $ . venv/bin/activate                       # activate it
@@ -35,11 +37,17 @@ python sandbox - for testing python knowledge - simple scripts etc
 ```
 $ pip install sniffer
 $ pip install MacFSEvents                   # osx
-$ sniffer                                   #
+$ sniffer                                   # have in a separeate report console - auto update
 ```
 ## Don't forget to modify .gitignore
 ```
-
+*.pyc
+*.swp
+.DS_Store
+answers
+.hg
+.idea
+/python3/venv/
 ```
 
 
