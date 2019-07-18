@@ -11,11 +11,14 @@ class AboutNone(Koan):
 
     def test_none_is_an_object(self):
         "Unlike NULL in a lot of languages"
-        self.assertEqual(__, isinstance(None, object))
+        self.assertEqual(True, isinstance(None, object))
+        # isinstance(obeject under test, class)
 
     def test_none_is_universal(self):
         "There is only one None"
-        self.assertEqual(____, None is None)
+        self.assertEqual(True, None is None)
+        # is - check id same object IE allocated same place in memory
+        # == - ar they the same type and value
 
     def test_what_exception_do_you_get_when_calling_nonexistent_methods(self):
         """
@@ -26,7 +29,9 @@ class AboutNone(Koan):
 
         Don't worry about what 'try' and 'except' do, we'll talk about this later
         """
-        try:
+        # I believe the above notation is part of the autmated documentation
+        # ``` documentation ``` just insude the method declaration
+        try:            
             None.some_method_none_does_not_know_about()
         except Exception as ex:
             ex2 = ex
@@ -37,15 +42,21 @@ class AboutNone(Koan):
         #
         #     http://bit.ly/__class__
 
-        self.assertEqual(__, ex2.__class__)
+        self.assertEqual(AttributeError, ex2.__class__)
 
         # What message was attached to the exception?
         # (HINT: replace __ with part of the error message.)
-        self.assertRegex(ex2.args[0], __)
+        print("ex2 & args[0]")
+        print(ex2)
+        print(ex2.args[0])
+        print(len(ex2.args))
+        self.assertRegex(ex2.args[0], 'some_method_none_does_not_know_about')
+        # assertRegex(s, r)                 - check r.search(s)
+        # match (string, pattern)             pattern.search(string)
 
     def test_none_is_distinct(self):
         """
         None is distinct from other things which are False.
         """
-        self.assertEqual(__, None is not 0)
-        self.assertEqual(__, None is not False)
+        self.assertEqual(True, None is not 0)
+        self.assertEqual(True, None is not False)
