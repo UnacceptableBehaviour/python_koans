@@ -35,6 +35,7 @@ python sandbox - for testing python knowledge - simple scripts etc
 
 ## Auto run test after code change saved (README.rst):
 ```
+$ . venv/bin/activate
 $ pip install sniffer
 $ pip install MacFSEvents                   # osx
 $ sniffer                                   # have in a separeate report console - auto update
