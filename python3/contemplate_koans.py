@@ -9,6 +9,7 @@
 # to the Python language, but a great deal of it has been copied wholesale.
 # So thanks guys!
 #
+# the journey to enlightenment starts with a single step . . 
 
 import sys
 
