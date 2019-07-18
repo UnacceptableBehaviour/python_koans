@@ -69,5 +69,6 @@ used in scent.py
 https://pypi.org/project/sniffer/
 
 ## L4-
-
+### Collections - imoroved alternatives to Python’s general purpose built-in containers, dict, list, set, and tuple
+https://docs.python.org/3/library/collections.html#collections.deque
 
