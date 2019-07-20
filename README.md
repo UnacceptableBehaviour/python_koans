@@ -68,7 +68,24 @@ used in scent.py
 ### Sniffer package
 https://pypi.org/project/sniffer/
 
-## L4-
-### Collections - imoroved alternatives to Python’s general purpose built-in containers, dict, list, set, and tuple
+## L4-6
+## Collections - improved alternatives
+### to Python’s general purpose built-in containers, dict, list, set, and tuple
 https://docs.python.org/3/library/collections.html#collections.deque
+
+### Literal String Interpolation
+https://www.python.org/dev/peps/pep-0498/
+
+History and background
+https://realpython.com/python-f-strings/
+
+## L7-
+## Built in functions
+https://docs.python.org/3/library/functions.html
+
+## Built in types
+https://docs.python.org/3/library/stdtypes.html
+
+### String methods
+https://www.w3schools.com/python/python_ref_string.asp
 
