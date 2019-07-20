@@ -8,14 +8,15 @@ class AboutStringManipulation(Koan):
     def test_use_format_to_interpolate_variables(self):
         value1 = 'one'
         value2 = 2
-        string = "The values are {0} and {1}".format(value1, value2)
-        self.assertEqual(__, string)
+        # string = "The values are {0} and {1}".format(value1, value2)  # WORKS
+        string = f"The values are {value1} and {value2}"                # also WORKS
+        self.assertEqual("The values are one and 2", string)
 
     def test_formatted_values_can_be_shown_in_any_order_or_be_repeated(self):
         value1 = 'doh'
         value2 = 'DOH'
         string = "The values are {1}, {0}, {0} and {1}!".format(value1, value2)
-        self.assertEqual(__, string)
+        self.assertEqual("The values are DOH, doh, doh and DOH!", string)
 
     def test_any_python_expression_may_be_interpolated(self):
         import math # import a standard python module with math functions
