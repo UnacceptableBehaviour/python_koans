@@ -63,6 +63,7 @@ https://docs.python.org/3/library/unittest.html#assert-methods
 ### Decorators
 https://python-3-patterns-idioms-test.readthedocs.io/en/latest/PythonDecorators.html
 https://www.python-course.eu/python3_decorators.php
+https://stackoverflow.com/questions/1622943/timeit-versus-timing-decorator  << Timing EG
 used in scent.py
 
 ### Sniffer package
@@ -79,7 +80,7 @@ https://www.python.org/dev/peps/pep-0498/
 History and background
 https://realpython.com/python-f-strings/
 
-## L7-
+## L7-9
 ## Built in functions
 https://docs.python.org/3/library/functions.html
 
@@ -89,3 +90,6 @@ https://docs.python.org/3/library/stdtypes.html
 ### String methods
 https://www.w3schools.com/python/python_ref_string.asp
 
+### timeit and EG Decorator
+https://docs.python.org/3/library/timeit.html
+https://stackoverflow.com/questions/1622943/timeit-versus-timing-decorator

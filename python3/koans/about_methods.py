@@ -8,19 +8,21 @@
 from runner.koan import *
 
 def my_global_function(a,b):
-    return a + b
+    return a + b;
 
 class AboutMethods(Koan):
     def test_calling_a_global_function(self):
-        self.assertEqual(__, my_global_function(2,3))
+        self.assertEqual(5, my_global_function(2,3))
 
     # NOTE: Wrong number of arguments is not a SYNTAX error, but a
     # runtime error.
     def test_calling_functions_with_wrong_number_of_arguments(self):
         try:
             my_global_function()
+            # TypeError: my_global_function() missing 2 required positional arguments: 'a' and 'b'
         except TypeError as exception:
             msg = exception.args[0]
+            #print(msg)
 
         # Note, the text comparison works for Python 3.2
         # It has changed in the past and may change in the future
@@ -29,19 +31,22 @@ class AboutMethods(Koan):
 
         try:
             my_global_function(1, 2, 3)
+            # TypeError: my_global_function() takes 2 positional arguments but 3 were given
         except Exception as e:
             msg = e.args[0]
 
         # Note, watch out for parenthesis. They need slashes in front!
-        self.assertRegex(msg, __)
+        self.assertRegex(msg, r'my_global_function\(\) takes 2 positional arguments but 3 were given')
 
     # ------------------------------------------------------------------
 
     def pointless_method(self, a, b):
         sum = a + b
+        # return sum - unlike ruby value must be explicitly returned
 
     def test_which_does_not_return_anything(self):
-        self.assertEqual(__, self.pointless_method(1, 2))
+        #self.assertEqual(3, self.pointless_method(1, 2)) # only w/ return ant end
+        self.assertEqual(None, self.pointless_method(1, 2))
         # Notice that methods accessed from class scope do not require
         # you to pass the first "self" argument?
 
@@ -51,18 +56,25 @@ class AboutMethods(Koan):
         return [a, b]
 
     def test_calling_with_default_values(self):
-        self.assertEqual(__, self.method_with_defaults(1))
-        self.assertEqual(__, self.method_with_defaults(1, 2))
+        self.assertEqual([1,'default_value'], self.method_with_defaults(1))
+        self.assertEqual([1,2], self.method_with_defaults(1, 2))
 
     # ------------------------------------------------------------------
 
     def method_with_var_args(self, *args):
         return args
-
+        # >>> def method_with_var_args(*args): return args;
+        # >>> type(method_with_var_args)
+        # <class 'function'>
+        # >>> type(method_with_var_args())
+        # <class 'tuple'>
+        # >>> method_with_var_args(1,3)
+        # (1, 3)
+        
     def test_calling_with_variable_arguments(self):
-        self.assertEqual(__, self.method_with_var_args())
+        self.assertEqual(tuple(), self.method_with_var_args())
         self.assertEqual(('one',), self.method_with_var_args('one'))
-        self.assertEqual(__, self.method_with_var_args('one', 'two'))
+        self.assertEqual(('one', 'two'), self.method_with_var_args('one', 'two'))
 
     # ------------------------------------------------------------------
 
@@ -73,7 +85,7 @@ class AboutMethods(Koan):
         def function_with_the_same_name(a, b):
             return a * b
 
-        self.assertEqual(__, function_with_the_same_name(3,4))
+        self.assertEqual(12, function_with_the_same_name(3,4))
 
     def test_calling_methods_in_same_class_with_explicit_receiver(self):
         def function_with_the_same_name(a, b):
