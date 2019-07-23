@@ -111,6 +111,11 @@ http://www.json.org/
 ### Documenting the cose with docstrings
 https://www.geeksforgeeks.org/python-docstrings/
 
-## L10-12
+## L10-13
 ## Sets
 https://www.programiz.com/python-programming/set
+
+## Solution to no switch - using dict
+### intersting syntax, neat solutions including default using .get(key, def_val)
+https://stackoverflow.com/questions/60208/replacements-for-switch-statement-in-python
+
