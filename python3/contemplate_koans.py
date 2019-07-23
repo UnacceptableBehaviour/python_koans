@@ -34,3 +34,4 @@ if __name__ == '__main__':
         from runner.mountain import Mountain
 
         Mountain().walk_the_path(sys.argv)
+
