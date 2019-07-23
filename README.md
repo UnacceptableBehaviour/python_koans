@@ -94,9 +94,20 @@ https://www.w3schools.com/python/python_ref_string.asp
 https://docs.python.org/3/library/timeit.html
 https://stackoverflow.com/questions/1622943/timeit-versus-timing-decorator
 
-### Instance, Class, Static methods
+
+```/python_koans/python3/koans/scratch_pad_0.py```
+### Instance, Class, Static METHODS
 https://realpython.com/instance-class-and-static-methods-demystified/
 
-### Instance, Class, Static variables
-file:///Users/simon/a_syllabus/lang/python/repos/python_koans/python3/koans/about_classes.py
+### Instance, Class, Static VARS
+https://stackoverflow.com/questions/5690888/variable-scopes-in-python-classes
+
+
+#### Aside - validating JSON
+https://jsonlint.com/
+#### Aside - JSON syntax
+http://www.json.org/
+
+
+
 
