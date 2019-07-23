@@ -108,6 +108,8 @@ https://jsonlint.com/
 #### Aside - JSON syntax
 http://www.json.org/
 
+### Documenting the cose with docstrings
+https://www.geeksforgeeks.org/python-docstrings/
 
 
 

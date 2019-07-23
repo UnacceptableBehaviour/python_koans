@@ -82,8 +82,8 @@ class IngredientDB:
             try:
                 with open(IngredientDB.__ingredient_db_file, 'r') as f:
                     json_db = f.read()
-                    IngredientDB.__ingredient_db = json.loads(json_db)
-                    IngredientDB.ingredients_loaded = True
+                    IngredientDB.__ingredient_db = json.loads(json_db)                    
+                    IngredientDB.ingredients_loaded = True                    
             
             # https://realpython.com/the-most-diabolical-python-antipattern/
             except Exception as e:
