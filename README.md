@@ -112,4 +112,5 @@ http://www.json.org/
 https://www.geeksforgeeks.org/python-docstrings/
 
 ## L10-12
-
+## Sets
+https://www.programiz.com/python-programming/set
