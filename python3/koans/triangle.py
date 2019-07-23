@@ -16,9 +16,15 @@
 # and
 #   about_triangle_project_2.py
 #
+from pprint import pprint
+
 def triangle(a, b, c):
-    # DELETE 'PASS' AND WRITE THIS CODE
-    pass
+    trangle_sides = set([a,b,c])
+    
+    triangle_type = ['no_exist','equilateral','isosceles','scalene']
+    
+    return( triangle_type[len(trangle_sides)] )
+
 
 # Error class used in part 2.  No need to change this code.
 class TriangleError(Exception):
