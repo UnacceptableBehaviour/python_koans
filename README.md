@@ -140,5 +140,9 @@ filter(by_this_function, data_to_filter)
 map(apply_this_function, data_to_process)
 
 ## Files
+### great reference:
 https://realpython.com/working-with-files-in-python/
+
+### List comprehensions
+https://www.programiz.com/python-programming/list-comprehension
 
