@@ -119,3 +119,14 @@ https://www.programiz.com/python-programming/set
 ### intersting syntax, neat solutions including default using .get(key, def_val)
 https://stackoverflow.com/questions/60208/replacements-for-switch-statement-in-python
 
+## L14-L17
+### Data Model  - a lot here!
+https://docs.python.org/3/reference/datamodel.html
+
+### Class Hierarchy, mro
+https://stackoverflow.com/questions/2010692/what-does-mro-do
+https://makina-corpus.com/blog/metier/2014/python-tutorial-understanding-python-mro-class-search-path
+
+### Exceptions
+https://docs.python.org/3/library/exceptions.html
+

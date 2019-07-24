@@ -9,41 +9,82 @@ class AboutExceptions(Koan):
         pass
 
     def test_exceptions_inherit_from_exception(self):
-        mro = self.MySpecialError.mro()
-        self.assertEqual(__, mro[1].__name__)
-        self.assertEqual(__, mro[2].__name__)
-        self.assertEqual(__, mro[3].__name__)
-        self.assertEqual(__, mro[4].__name__)
+        # >>> class MySpecialError(RuntimeError):pass;
+        # ... 
+        # >>> MySpecialError.mro()                          # mro - method resolution order - query inheritance chain
+        # [<class '__main__.MySpecialError'>, <class 'RuntimeError'>, <class 'Exception'>, <class 'BaseException'>, <class 'object'>]
+        # >>> type(MySpecialError.mro())
+        # <class 'list'>
+        # >>> len(MySpecialError.mro())
+        # 5
+        # >>> type(MySpecialError.mro()[0].__name__)
+        # <class 'str'>
+
+        mro = self.MySpecialError.mro()                     # mro - method resolution order - query inheritance chain
+        self.assertEqual('MySpecialError', mro[0].__name__)
+        self.assertEqual('RuntimeError', mro[1].__name__)
+        self.assertEqual('Exception', mro[2].__name__)
+        self.assertEqual('BaseException', mro[3].__name__)
+        self.assertEqual('object', mro[4].__name__)
 
     def test_try_clause(self):
+        from pprint import pprint
         result = None
         try:
-            self.fail("Oops")
+            self.fail("Oops")                                           # whats this?
         except Exception as ex:
             result = 'exception handled'
-
+            print("--investigating--")
+            pprint(ex)
             ex2 = ex
 
-        self.assertEqual(__, result)
+        # >>> m = MySpecialError('bla')
+        # >>> isinstance(m, MySpecialError)
+        # True
+        # >>> isinstance(m, RuntimeError)
+        # True
+        # >>> m
+        # MySpecialError('bla')
+        # >>> issubclass(RuntimeError, Exception)
+        # True
+        # >>> type(m.args)
+        # <class 'tuple'>
+        # >>> len(m.args)
+        # 1
+        # >>> m.args[0]
+        # 'bla'
+        # >>> isinstance(m, RuntimeError)                               # < < < < < < !! ?? TODO
+        # True
 
-        self.assertEqual(__, isinstance(ex2, Exception))
-        self.assertEqual(__, isinstance(ex2, RuntimeError))
+        self.assertEqual('exception handled', result)
+
+        self.assertEqual(True, isinstance(ex2, Exception))
+        self.assertEqual(False, isinstance(ex2, RuntimeError))          # < < < < < < !!
 
         self.assertTrue(issubclass(RuntimeError, Exception), \
             "RuntimeError is a subclass of Exception")
 
-        self.assertEqual(__, ex2.args[0])
+        self.assertEqual('Oops', ex2.args[0])
 
     def test_raising_a_specific_error(self):
         result = None
+        ex_dbg = None
         try:
+            #pass
             raise self.MySpecialError("My Message")
         except self.MySpecialError as ex:
             result = 'exception handled'
             msg = ex.args[0]
+            ex_dbg = ex
+            #print("- - i - -")
+            #print(type(ex_dbg))
+            #print(ex_dbg.mro())
 
-        self.assertEqual(__, result)
-        self.assertEqual(__, msg)
+        self.assertEqual('exception handled', result)
+        self.assertEqual("My Message", msg)
+        #self.assertEqual(True, isinstance(ex_dbg, RuntimeError))       # PASS
+        #self.assertEqual(True, isinstance(ex_dbg, MySpecialError))     # FAILS          TODO - WHY?
+                                                                        # NameError: name 'MySpecialError' is not defined
 
     def test_else_clause(self):
         result = None
@@ -53,9 +94,9 @@ class AboutExceptions(Koan):
             result = 'it broke'
             pass
         else:
-            result = 'no damage done'
+            result = 'no damage done'                                   # TODO - Ex to test
 
-        self.assertEqual(__, result)
+        self.assertEqual('no damage done', result)
 
 
     def test_finally_clause(self):
@@ -68,4 +109,4 @@ class AboutExceptions(Koan):
         finally:
             result = 'always run'
 
-        self.assertEqual(__, result)
+        self.assertEqual('always run', result)
