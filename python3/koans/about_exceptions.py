@@ -54,11 +54,11 @@ class AboutExceptions(Koan):
         # >>> m.args[0]
         # 'bla'
         # >>> isinstance(m, RuntimeError)                               # < < < < < < !! ?? TODO
-        # True
-
-        self.assertEqual('exception handled', result)
-
-        self.assertEqual(True, isinstance(ex2, Exception))
+        # True                                                                      #
+                                                                                    #
+        self.assertEqual('exception handled', result)                               #
+                                                            # https://docs.python.org/3/tutorial/errors.html#exceptions
+        self.assertEqual(True, isinstance(ex2, Exception))                          #
         self.assertEqual(False, isinstance(ex2, RuntimeError))          # < < < < < < !!
 
         self.assertTrue(issubclass(RuntimeError, Exception), \
@@ -84,8 +84,8 @@ class AboutExceptions(Koan):
         self.assertEqual("My Message", msg)
         #self.assertEqual(True, isinstance(ex_dbg, RuntimeError))       # PASS
         #self.assertEqual(True, isinstance(ex_dbg, MySpecialError))     # FAILS          TODO - WHY?
-                                                                        # NameError: name 'MySpecialError' is not defined
-
+                                                            # NameError: name 'MySpecialError' is not defined
+                                                            # https://docs.python.org/3/tutorial/errors.html#exceptions
     def test_else_clause(self):
         result = None
         try:

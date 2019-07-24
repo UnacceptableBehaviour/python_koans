@@ -130,3 +130,6 @@ https://makina-corpus.com/blog/metier/2014/python-tutorial-understanding-python-
 ### Exceptions
 https://docs.python.org/3/library/exceptions.html
 
+### Error & Exceptions
+https://docs.python.org/3/tutorial/errors.html
+

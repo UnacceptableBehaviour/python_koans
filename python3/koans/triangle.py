@@ -19,11 +19,23 @@
 from pprint import pprint
 
 def triangle(a, b, c):
-    trangle_sides = set([a,b,c])
+    triangle_sides = set([a,b,c])
+    list_sides = [a,b,c]
+    
+    if 0 in triangle_sides:
+        raise TriangleError('funky trianle: 0 length side means its a line!')
+    
+    if True in [i < 0 for i in triangle_sides]:
+        raise TriangleError('funky trianle: -ve side means its in another dimension! (pay close attention..)')
+    
+    m = max(list_sides)          # get max value
+    list_sides.remove(m)         # remove it from the set
+    if m >= sum(list_sides):       # see its larger than the remaining set members
+        raise TriangleError('funky trianle: 1 very long side!')
     
     triangle_type = ['no_exist','equilateral','isosceles','scalene']
     
-    return( triangle_type[len(trangle_sides)] )
+    return( triangle_type[len(triangle_sides)] )
 
 
 # Error class used in part 2.  No need to change this code.
