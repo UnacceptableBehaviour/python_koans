@@ -28,9 +28,13 @@ def triangle(a, b, c):
     if True in [i < 0 for i in triangle_sides]:
         raise TriangleError('funky trianle: -ve side means its in another dimension! (pay close attention..)')
     
-    m = max(list_sides)          # get max value
-    list_sides.remove(m)         # remove it from the set
-    if m >= sum(list_sides):       # see its larger than the remaining set members
+    # m = max(list_sides)          # get max value
+    # list_sides.remove(m)         # remove it from the set
+    # if m >= sum(list_sides):       # see its larger than the remaining set members
+    #     raise TriangleError('funky trianle: 1 very long side!')
+    
+    # think above is more maintainable - debatable
+    if max(list_sides)*2 >= sum(list_sides):         # sum(list_sides) includes max(list_sides) so multiply max * 2 to balance
         raise TriangleError('funky trianle: 1 very long side!')
     
     triangle_type = ['no_exist','equilateral','isosceles','scalene']

@@ -133,3 +133,12 @@ https://docs.python.org/3/library/exceptions.html
 ### Error & Exceptions
 https://docs.python.org/3/tutorial/errors.html
 
+## Filter & Map
+
+### difference
+filter(by_this_function, data_to_filter)
+map(apply_this_function, data_to_process)
+
+## Files
+https://realpython.com/working-with-files-in-python/
+

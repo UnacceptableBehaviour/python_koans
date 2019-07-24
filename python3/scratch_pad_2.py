@@ -14,7 +14,7 @@ from pprint import pprint
 t = set([1,2,-3])               # create a set t
 t = set([1,2,3])               # create a set t
 t = set([-1,-2,-3])               # create a set t
-t = set([1,2,3])               # create a set t
+t2 = set([1,2,3])               # create a set t
 
 type(list(t))                   # covert it to a list
  
@@ -44,6 +44,7 @@ if True in [i < 0 for i in t]:  # there's a -ve number in the set
 
 t = list(t)
 
+
 m = max(t)          # get max value
 t.remove(m)         # remove it from the set
 
@@ -54,5 +55,9 @@ if m >= sum(t):       # see its larger than the remaining set members
 else:
     print("Aesome a triangle")
 
+# in one line = we know the size
+
+if max(t2)*2 >= sum(t2):         # sum(t2) include max(t2) so multiply max(2) to balance
+    print("funky triangle")
     
     
