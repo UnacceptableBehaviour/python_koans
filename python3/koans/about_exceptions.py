@@ -5,7 +5,7 @@ from runner.koan import *
 
 class AboutExceptions(Koan):
 
-    class MySpecialError(RuntimeError):
+    class MySpecialError(RuntimeError):                     # inherits from RuntimeError
         pass
 
     def test_exceptions_inherit_from_exception(self):
