@@ -1,5 +1,6 @@
 # python_koans
 get up to speed on python with koans test driven learning
+[skip to end to find list of other koans on github](#other-koans-on-github)
 
 to run tests:
 read README.rst
@@ -158,4 +159,12 @@ https://www.freecodecamp.org/news/how-and-why-you-should-use-python-generators-f
 http://buildingskills.itmaybeahack.com/book/python-2.6/html/p03/p03c05_properties.html
 about_classes.py
 https://www.tutorialspoint.com/What-is-the-difference-between-attributes-and-properties-in-python
+
+
+
+
+
+## Other koans on github
+https://github.com/ahmdrefat/awesome-koans/blob/master/koans-en.md
+####  aWeSoMe!
 
