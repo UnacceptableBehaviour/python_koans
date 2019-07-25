@@ -12,10 +12,12 @@ class AboutClasses(Koan):
         # NOTE: The .__name__ attribute will convert the class
         # into a string value.
         fido = self.Dog()
-        self.assertEqual(__, fido.__class__.__name__)
+        
+        self.assertEqual(AboutClasses.Dog, fido.__class__)  # TODO how to know how much of the chainis required?
+        self.assertEqual('Dog', fido.__class__.__name__)
 
     def test_classes_have_docstrings(self):
-        self.assertRegex(self.Dog.__doc__, __)
+        self.assertRegex(self.Dog.__doc__, "Dogs need regular walkies. Never, ever let them drive.")
 
     # ------------------------------------------------------------------
 
@@ -28,12 +30,12 @@ class AboutClasses(Koan):
 
     def test_init_method_is_the_constructor(self):
         dog = self.Dog2()
-        self.assertEqual(__, dog._name)
+        self.assertEqual('Paul', dog._name)
 
     def test_private_attributes_are_not_really_private(self):
         dog = self.Dog2()
         dog.set_name("Fido")
-        self.assertEqual(__, dog._name)
+        self.assertEqual("Fido", dog._name)
         # The _ prefix in _name implies private ownership, but nothing is truly
         # private in Python.
 
@@ -41,11 +43,11 @@ class AboutClasses(Koan):
         fido = self.Dog2()
         fido.set_name("Fido")
 
-        self.assertEqual(__, getattr(fido, "_name"))
+        self.assertEqual("Fido", getattr(fido, "_name"))
         # getattr(), setattr() and delattr() are a way of accessing attributes
         # by method rather than through assignment operators
 
-        self.assertEqual(__, fido.__dict__["_name"])
+        self.assertEqual("Fido", fido.__dict__["_name"])
         # Yes, this works here, but don't rely on the __dict__ object! Some
         # class implementations use optimization which result in __dict__ not
         # showing everything.
@@ -62,41 +64,73 @@ class AboutClasses(Koan):
         def get_name(self):
             return self._name
 
-        name = property(get_name, set_name)
+        name = property(get_name, set_name)     # name is class (static) scope class Dog3
+                                                # diff between property & attribute?
+        # first superficial glance property is and attibute wrapped in an accessor mutator pattern
+        #
+        # (Descriptor Pattern - Dog3 is the owner? idiomatically speaking)
+        # see http://buildingskills.itmaybeahack.com/book/python-2.6/html/p03/p03c05_properties.html
+        #
+        # ie instance var wrapped with get set del methods - probaly more to it than that. . .
+        # . . .
+        # so the above is associating get_name(), and set_name() to class variable 'name'
+        # creating the property name
+        #
+        # basically it. There is a shorthand to creating properties in the form of a decorator
+        # see below
+        # @property
+        # 
+        
 
     def test_that_name_can_be_read_as_a_property(self):
+        bona = self.Dog3()
         fido = self.Dog3()
         fido.set_name("Fido")
+        bona.set_name("Bona")
 
         # access as method
-        self.assertEqual(__, fido.get_name())
+        self.assertEqual("Fido", fido.get_name())
 
         # access as property
-        self.assertEqual(__, fido.name)
+        self.assertEqual("Fido", fido.name)        
+
+        # access as method
+        self.assertEqual("Bona", bona.get_name())
+
+        # access as property
+        self.assertEqual("Bona", bona.name)
+                
+        self.assertNotEqual( id(bona.name), id(fido.name) )
+        
+        self.assertEqual( id(bona.get_name), id(fido.get_name) )
+        
 
     # ------------------------------------------------------------------
 
     class Dog4:
         def __init__(self):
-            self._name = None
+            self._name = None           # instance var cordially 'private'
 
-        @property
-        def name(self):
+        @property                       # decorator
+        def name(self):                 # instance method - accessor - @name.getter
             return self._name
 
-        @name.setter
-        def name(self, a_name):
-            self._name = a_name
-
+        @name.setter                    # decorator.?        
+        def name(self, a_name):         # instance method mutator
+            self._name = a_name         # I thought there was only supposed to be one way of
+                                        # doing things in python?? bla bla bla
+        #@name.deleter  - also exits
+            
     def test_creating_properties_with_decorators_is_slightly_easier(self):
         fido = self.Dog4()
 
         fido.name = "Fido"
-        self.assertEqual(__, fido.name)
+        self.assertEqual("Fido", fido.name)
 
     # ------------------------------------------------------------------
 
     class Dog5:
+        #def __init__(self, initial_name="windy bum"): adding a default fixes issue
         def __init__(self, initial_name):
             self._name = initial_name
 
@@ -106,20 +140,22 @@ class AboutClasses(Koan):
 
     def test_init_provides_initial_values_for_instance_variables(self):
         fido = self.Dog5("Fido")
-        self.assertEqual(__, fido.name)
+        self.assertEqual("Fido", fido.name)
 
     def test_args_must_match_init(self):
-        with self.assertRaises(___):
-            self.Dog5()
+        with self.assertRaises(TypeError):
+            self.Dog5()   # TypeError: __init__() missing 1 required positional argument: 'initial_name'
+            #self.Dog5(1)   # AssertionError: ___ not raised
+            #self.Dog5("")   # AssertionError: ___ not raised
 
         # THINK ABOUT IT:
-        # Why is this so?
+        # Why is this so? - argument missin and no default given? What am I missing here?
 
     def test_different_objects_have_different_instance_variables(self):
         fido = self.Dog5("Fido")
         rover = self.Dog5("Rover")
 
-        self.assertEqual(__, rover.name == fido.name)
+        self.assertEqual(False, rover.name == fido.name)
 
     # ------------------------------------------------------------------
 
@@ -134,7 +170,7 @@ class AboutClasses(Koan):
             #
             # Implement this!
             #
-            return __
+            return self._name #f"My dog is {self._name}"
 
         def __repr__(self):
             return "<Dog named '" + self._name + "'>"
@@ -142,7 +178,7 @@ class AboutClasses(Koan):
     def test_inside_a_method_self_refers_to_the_containing_object(self):
         fido = self.Dog6("Fido")
 
-        self.assertEqual(__, fido.get_self())  # Not a string!
+        self.assertEqual(fido, fido.get_self())  # Not a string!
 
     def test_str_provides_a_string_version_of_the_object(self):
         fido = self.Dog6("Fido")
@@ -152,17 +188,17 @@ class AboutClasses(Koan):
     def test_str_is_used_explicitly_in_string_interpolation(self):
         fido = self.Dog6("Fido")
 
-        self.assertEqual(__, "My dog is " + str(fido))
+        self.assertEqual('My dog is Fido', "My dog is " + str(fido))
 
     def test_repr_provides_a_more_complete_string_version(self):
         fido = self.Dog6("Fido")
-        self.assertEqual(__, repr(fido))
+        self.assertEqual("<Dog named 'Fido'>", repr(fido))
 
     def test_all_objects_support_str_and_repr(self):
         seq = [1, 2, 3]
 
-        self.assertEqual(__, str(seq))
-        self.assertEqual(__, repr(seq))
+        self.assertEqual('[1, 2, 3]', str(seq))
+        self.assertEqual('[1, 2, 3]', repr(seq))
 
-        self.assertEqual(__, str("STRING"))
-        self.assertEqual(__, repr("STRING"))
+        self.assertEqual("STRING", str("STRING"))
+        self.assertEqual("'STRING'", repr("STRING"))

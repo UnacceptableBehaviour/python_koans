@@ -154,3 +154,8 @@ http://www.python.org/dev/peps/pep-0342/    read spec summary quick overview! (a
 ## & Iterator pattern
 https://www.freecodecamp.org/news/how-and-why-you-should-use-python-generators-f6fb56650888/
 
+### Properties & Attributes
+http://buildingskills.itmaybeahack.com/book/python-2.6/html/p03/p03c05_properties.html
+about_classes.py
+https://www.tutorialspoint.com/What-is-the-difference-between-attributes-and-properties-in-python
+
