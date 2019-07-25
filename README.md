@@ -72,7 +72,7 @@ used in scent.py
 https://pypi.org/project/sniffer/
 
 ## L4-6
-## Collections - improved alternatives
+### = = Collections - improved alternatives
 ### to Python’s general purpose built-in containers, dict, list, set, and tuple
 https://docs.python.org/3/library/collections.html#collections.deque
 
@@ -83,10 +83,10 @@ History and background
 https://realpython.com/python-f-strings/
 
 ## L7-9
-## Built in functions
+### = =  Built in functions
 https://docs.python.org/3/library/functions.html
 
-## Built in types
+### = =  Built in types
 https://docs.python.org/3/library/stdtypes.html
 
 ### String methods
@@ -114,10 +114,10 @@ http://www.json.org/
 https://www.geeksforgeeks.org/python-docstrings/
 
 ## L10-13
-## Sets
+### = =  Sets
 https://www.programiz.com/python-programming/set
 
-## Solution to no switch - using dict
+### = =  Solution to no switch - using dict
 ### intersting syntax, neat solutions including default using .get(key, def_val)
 https://stackoverflow.com/questions/60208/replacements-for-switch-statement-in-python
 
@@ -135,13 +135,12 @@ https://docs.python.org/3/library/exceptions.html
 ### Error & Exceptions
 https://docs.python.org/3/tutorial/errors.html
 
-## Filter & Map
-
+### = =  Filter & Map
 ### difference
 filter(by_this_function, data_to_filter)                # returns iterator   to get array list( filter(bla) )
 map(apply_this_function, data_to_process)     # returns iterator   same for map
 
-## Files
+### = =  Files
 ### great reference:
 https://realpython.com/working-with-files-in-python/
 
@@ -153,7 +152,7 @@ https://www.programiz.com/python-programming/list-comprehension
 http://www.python.org/dev/peps/pep-0342/    read spec summary quick overview! (and examples)
 
 ### Generators & Lazy evaluation  - when to use - back ground - better
-## & Iterator pattern
+### = =  & Iterator pattern
 https://www.freecodecamp.org/news/how-and-why-you-should-use-python-generators-f6fb56650888/
 
 ### Properties & Attributes
