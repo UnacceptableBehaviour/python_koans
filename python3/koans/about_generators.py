@@ -15,11 +15,25 @@ class AboutGenerators(Koan):
     def test_generating_values_on_the_fly(self):
         result = list()
         bacon_generator = (n + ' bacon' for n in ['crunchy','veggie','danish'])
+        # comprehension that generates tuples?
+        # NOPE - actually a returns a genexpr object
+        #
+        # >>> (n + ' bacon' for n in ['crunchy','veggie','danish'])
+        # <generator object <genexpr> at 0x10a435570>
+        #
+        # >>> for i in (n + ' bacon' for n in ['crunchy','veggie','danish']): print(i)
+        # ... 
+        # crunchy bacon
+        # veggie bacon
+        # danish bacon
+        # [] list comprehension
+        # {} set comprehension
+        # () generator              see below
 
         for bacon in bacon_generator:
             result.append(bacon)
 
-        self.assertEqual(__, result)
+        self.assertEqual(['crunchy bacon','veggie bacon','danish bacon'], result)
 
     def test_generators_are_different_to_list_comprehensions(self):
         num_list = [x*2 for x in range(1,3)]
@@ -28,9 +42,9 @@ class AboutGenerators(Koan):
         self.assertEqual(2, num_list[0])
 
         # A generator has to be iterated through.
-        with self.assertRaises(___): num = num_generator[0]
+        with self.assertRaises(TypeError): num = num_generator[0]
 
-        self.assertEqual(__, list(num_generator)[0])
+        self.assertEqual(2, list(num_generator)[0])
 
         # Both list comprehensions and generators can be iterated though. However, a generator
         # function is only called on the first iteration. The values are generated on the fly
@@ -44,8 +58,8 @@ class AboutGenerators(Koan):
         attempt1 = list(dynamite)
         attempt2 = list(dynamite)
 
-        self.assertEqual(__, attempt1)
-        self.assertEqual(__, attempt2)
+        self.assertEqual(['Boom!','Boom!','Boom!'], attempt1)
+        self.assertEqual([], attempt2)
 
     # ------------------------------------------------------------------
 
@@ -59,13 +73,18 @@ class AboutGenerators(Koan):
         result = list()
         for item in self.simple_generator_method():
             result.append(item)
-        self.assertEqual(__, result)
+        self.assertEqual(['peanut', 'butter', 'and', 'jelly'], result)
 
     def test_generators_can_be_manually_iterated_and_closed(self):
-        result = self.simple_generator_method()
-        self.assertEqual(__, next(result))
-        self.assertEqual(__, next(result))
+        result = self.simple_generator_method()  # returns <class 'generator'> not 'peanut'
+        print(type(result)) # <class 'generator'>
+        self.assertEqual('peanut', next(result))
+        self.assertEqual('butter', next(result))
         result.close()
+        result = self.simple_generator_method()
+        for i in result: print(i) # print all 4 - from the START
+                                  # iterator protocol, same as file, and others
+        
 
     # ------------------------------------------------------------------
 
@@ -74,26 +93,28 @@ class AboutGenerators(Koan):
             yield x * x
 
     def test_generator_method_with_parameter(self):
-        result = self.square_me(range(2,5))
-        self.assertEqual(__, list(result))
+        result = self.square_me(range(2,5)) # 2,3,4
+        self.assertEqual([4,9,16], list(result))
 
     # ------------------------------------------------------------------
 
     def sum_it(self, seq):
-        value = 0
+        value = 0               # static var? - what?
+                                # yield o/p's a value - not return - method is still running!
+                                # excution continues once block to which yield passes completes
         for num in seq:
             # The local state of 'value' will be retained between iterations
             value += num
             yield value
 
     def test_generator_keeps_track_of_local_variables(self):
-        result = self.sum_it(range(2,5))
-        self.assertEqual(__, list(result))
+        result = self.sum_it(range(2,5)) # 2,3,5
+        self.assertEqual([2,5,9], list(result))
 
     # ------------------------------------------------------------------
 
     def coroutine(self):
-        result = yield
+        result = yield      # incoming data - receives data from a send 
         yield result
 
     def test_generators_can_act_as_coroutines(self):
@@ -104,9 +125,13 @@ class AboutGenerators(Koan):
         #
         # Hint: Read the "Specification: Sending Values into Generators"
         #       section of http://www.python.org/dev/peps/pep-0342/
+        #
+        # TODO: Ex createe iterator
+        # https://www.freecodecamp.org/news/how-and-why-you-should-use-python-generators-f6fb56650888/
+        # read: https://www.freecodecamp.org/news/how-i-used-python-to-find-interesting-people-on-medium-be9261b924b0/
         next(generator)
 
-        self.assertEqual(__, generator.send(1 + 2))
+        self.assertEqual(3, generator.send(1 + 2))
 
     def test_before_sending_a_value_to_a_generator_next_must_be_called(self):
         generator = self.coroutine()
@@ -114,14 +139,15 @@ class AboutGenerators(Koan):
         try:
             generator.send(1 + 2)
         except TypeError as ex:
-            self.assertRegex(ex.args[0], __)
+                       # TypeError: can't send non-None value to a just-started generator
+            self.assertRegex(ex.args[0], 'send non-None value to a just-started generator')
 
     # ------------------------------------------------------------------
 
     def yield_tester(self):
-        value = yield
-        if value:
-            yield value
+        value = yield               # use send to push data - can skip with next()
+        if value:                   # return value based on that
+            yield value             
         else:
             yield 'no value'
 
@@ -132,11 +158,11 @@ class AboutGenerators(Koan):
 
         generator2 = self.yield_tester()
         next(generator2)
-        self.assertEqual(__, next(generator2))
+        self.assertEqual('no value', next(generator2))
 
     def test_send_none_is_equivalent_to_next(self):
         generator = self.yield_tester()
 
         next(generator)
         # 'next(generator)' is exactly equivalent to 'generator.send(None)'
-        self.assertEqual(__, generator.send(None))
+        self.assertEqual('no value', generator.send(None))

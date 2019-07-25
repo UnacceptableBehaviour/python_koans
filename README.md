@@ -146,3 +146,11 @@ https://realpython.com/working-with-files-in-python/
 ### List comprehensions
 https://www.programiz.com/python-programming/list-comprehension
 
+## L18-21
+### Generators - spec
+http://www.python.org/dev/peps/pep-0342/    sheez - read spec summary quick overview!
+
+### Generators & Lazy evaluation  - when to use - back ground - better
+## & Iterator pattern
+https://www.freecodecamp.org/news/how-and-why-you-should-use-python-generators-f6fb56650888/
+
