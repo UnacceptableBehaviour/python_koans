@@ -32,11 +32,33 @@ from runner.koan import *
 #
 # Your goal is to write the score method.
 
-def score(dice):
-    # You need to write this method
-    pass
+def score(immutable_dice):    
+    score = 0
+    
+    dice = immutable_dice
+    
+    # count the 3 offs
+    for number in range(1,7):
+        if dice.count(number) >= 3:
+            score += (number * 100)
 
-class AboutScoringProject(Koan):
+            if number == 1: score += 900                # 3 1's is a 1000, not 100!!
+            
+            for r in range(0,3): dice.remove(number)    # remove 3 dice - of relevant number
+    
+    # counte whats left, only 1's and 5's are worth anything
+    values = { 1:100, 2:0, 3:0, 4:0, 5:50, 6:0 }
+    
+    for die in dice:
+        try:
+            score += values[die]
+            
+        except KeyError:
+            print("Hold the dodgey die high in the air for all in the saloon to see and start blasting")
+    
+    return score
+
+class AboutScoringProject(Koan):    
     def test_score_of_an_empty_list_is_zero(self):
         self.assertEqual(0, score([]))
 

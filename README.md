@@ -136,8 +136,8 @@ https://docs.python.org/3/tutorial/errors.html
 ## Filter & Map
 
 ### difference
-filter(by_this_function, data_to_filter)
-map(apply_this_function, data_to_process)
+filter(by_this_function, data_to_filter)                # returns iterator   to get array list( filter(bla) )
+map(apply_this_function, data_to_process)     # returns iterator   same for map
 
 ## Files
 ### great reference:
@@ -148,7 +148,7 @@ https://www.programiz.com/python-programming/list-comprehension
 
 ## L18-21
 ### Generators - spec
-http://www.python.org/dev/peps/pep-0342/    sheez - read spec summary quick overview!
+http://www.python.org/dev/peps/pep-0342/    read spec summary quick overview! (and examples)
 
 ### Generators & Lazy evaluation  - when to use - back ground - better
 ## & Iterator pattern
