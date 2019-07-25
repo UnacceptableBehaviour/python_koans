@@ -1,6 +1,7 @@
 # python_koans
 get up to speed on python with koans test driven learning
-[skip to end to find list of other koans on github](#other-koans-on-github)
+
+( [skip to end to find list of other koans on github](#other-koans-on-github) )
 
 to run tests:
 read README.rst
