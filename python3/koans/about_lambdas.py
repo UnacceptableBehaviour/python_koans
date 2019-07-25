@@ -10,7 +10,7 @@ from runner.koan import *
 class AboutLambdas(Koan):
     def test_lambdas_can_be_assigned_to_variables_and_called_explicitly(self):
         add_one = lambda n: n + 1
-        self.assertEqual(__, add_one(10))
+        self.assertEqual(11, add_one(10))
 
     # ------------------------------------------------------------------
 
@@ -18,11 +18,13 @@ class AboutLambdas(Koan):
         return lambda qty: str(qty) + " " + order + "s"
 
     def test_accessing_lambda_via_assignment(self):
-        sausages = self.make_order('sausage')
-        eggs = self.make_order('egg')
+        sausages = self.make_order('sausage')       # lambda qty: str(qty) + " " + "sausages"
+        eggs = self.make_order('egg')               # lambda qty: str(qty) + " " + "eggs"
 
-        self.assertEqual(__, sausages(3))
-        self.assertEqual(__, eggs(2))
+        self.assertEqual('3 sausages', sausages(3))
+        self.assertEqual('2 eggs', eggs(2))
+        self.assertEqual('1 eggs', eggs(1))
 
     def test_accessing_lambda_without_assignment(self):
-        self.assertEqual(__, self.make_order('spam')(39823))
+        self.assertEqual('39823 spams', self.make_order('spam')(39823)) # alot of spams
+                            # assemble lambda       (pass qty)

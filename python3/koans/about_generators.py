@@ -129,6 +129,8 @@ class AboutGenerators(Koan):
         # TODO: Ex createe iterator
         # https://www.freecodecamp.org/news/how-and-why-you-should-use-python-generators-f6fb56650888/
         # read: https://www.freecodecamp.org/news/how-i-used-python-to-find-interesting-people-on-medium-be9261b924b0/
+        # TODO
+        # work though examples at bottom: https://www.python.org/dev/peps/pep-0342/#examples
         next(generator)
 
         self.assertEqual(3, generator.send(1 + 2))
