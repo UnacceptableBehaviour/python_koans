@@ -7,7 +7,8 @@ import random
 
 class DiceSet:
     def __init__(self):
-        self._values = None
+        self._values = [] 
+        self.roll(5)
 
     @property
     def values(self):
@@ -15,8 +16,13 @@ class DiceSet:
 
     def roll(self, n):
         # Needs implementing!
-        # Tip: random.randint(min, max) can be used to generate random numbers
-        pass
+        # Tip: random.randint(min, max) inclusinve        
+        
+        self._values = []
+        
+        for die in range(0,n):
+            self._values.append( random.randint(1, 6) )
+
 
 class AboutDiceProject(Koan):
     def test_can_create_a_dice_set(self):
@@ -45,7 +51,7 @@ class AboutDiceProject(Koan):
         dice.roll(5)
         first_time = dice.values
 
-        dice.roll(5)
+        dice.roll(5) 
         second_time = dice.values
 
         self.assertNotEqual(first_time, second_time, \
