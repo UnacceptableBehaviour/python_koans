@@ -72,8 +72,8 @@ used in scent.py
 https://pypi.org/project/sniffer/
 
 ## L4-6
-### = = Collections - improved alternatives
-### to Python’s general purpose built-in containers, dict, list, set, and tuple
+### = = Collections
+#### Improved alternatives to Python’s general purpose built-in containers, dict, list, set, and tuple
 https://docs.python.org/3/library/collections.html#collections.deque
 
 ### Literal String Interpolation
@@ -137,8 +137,9 @@ https://docs.python.org/3/tutorial/errors.html
 
 ### = =  Filter & Map
 ### difference
-filter(by_this_function, data_to_filter)                # returns iterator   to get array list( filter(bla) )
-map(apply_this_function, data_to_process)     # returns iterator   same for map
+filter(by_this_function, data_to_filter)                - - # returns iterator   to get array list( filter(bla) )
+
+map(apply_this_function, data_to_process)     - - # returns iterator   same for map
 
 ### = =  Files
 ### great reference:
