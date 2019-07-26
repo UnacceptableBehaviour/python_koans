@@ -171,6 +171,8 @@ https://alysivji.github.io/managing-resources-with-context-managers-pythonic.htm
 More 3.7\
 https://docs.python.org/3.7/reference/datamodel.html#with-statement-context-managers\
 
+### Lambdas
+https://www.afternerd.com/blog/python-lambdas/
 
 
 
