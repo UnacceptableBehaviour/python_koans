@@ -161,6 +161,15 @@ http://buildingskills.itmaybeahack.com/book/python-2.6/html/p03/p03c05_propertie
 about_classes.py
 https://www.tutorialspoint.com/What-is-the-difference-between-attributes-and-properties-in-python
 
+### = =  Python ANTI-PATTERNS
+https://docs.quantifiedcode.com/python-anti-patterns/correctness/exit_must_accept_three_arguments.html\
+https://docs.quantifiedcode.com/python-anti-patterns/index.html\
+
+### Python Context Manager Protocol
+Intro (and Exersize)\
+https://alysivji.github.io/managing-resources-with-context-managers-pythonic.html\
+More 3.7\
+https://docs.python.org/3.7/reference/datamodel.html#with-statement-context-managers\
 
 
 
