@@ -161,6 +161,7 @@ http://buildingskills.itmaybeahack.com/book/python-2.6/html/p03/p03c05_propertie
 about_classes.py
 https://www.tutorialspoint.com/What-is-the-difference-between-attributes-and-properties-in-python
 
+## L22-24
 ### = =  Python ANTI-PATTERNS
 https://docs.quantifiedcode.com/python-anti-patterns/correctness/exit_must_accept_three_arguments.html\
 https://docs.quantifiedcode.com/python-anti-patterns/index.html\
@@ -173,6 +174,17 @@ https://docs.python.org/3.7/reference/datamodel.html#with-statement-context-mana
 
 ### Lambdas
 https://www.afternerd.com/blog/python-lambdas/
+
+### = = Object / Scope inpection
+dir() local scope,\
+Without arguments, return the list of names in the current local scope.\
+dir(obj)\
+With an argument, attempt to return a list of valid attributes for that object. Can be overloaded\
+https://docs.python.org/3/library/functions.html#dir
+
+### Descriptor Protocol
+https://docs.python.org/3.7/howto/descriptor.html
+about_method_bindigs.py
 
 
 
