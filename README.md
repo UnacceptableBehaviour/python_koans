@@ -160,6 +160,9 @@ https://www.freecodecamp.org/news/how-and-why-you-should-use-python-generators-f
 http://buildingskills.itmaybeahack.com/book/python-2.6/html/p03/p03c05_properties.html
 about_classes.py
 https://www.tutorialspoint.com/What-is-the-difference-between-attributes-and-properties-in-python
+How properties work - Descriptor Protocl
+https://docs.python.org/3.7/howto/descriptor.html -(see properties)
+
 
 ## L22-24
 ### = =  Python ANTI-PATTERNS
@@ -185,6 +188,8 @@ https://docs.python.org/3/library/functions.html#dir
 ### Descriptor Protocol
 https://docs.python.org/3.7/howto/descriptor.html
 about_method_bindigs.py
+
+
 
 
 

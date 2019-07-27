@@ -10,21 +10,53 @@ def function():
 def function2():
     return "tractor"
 
-# class Class: def method(self): return "parrot"
 class Class:
     def method(self):
-        return "parrot"             # eaten by python! its dead now . . 
+        return "parrot"             # eaten by python! its dead now . .
+    
+    def turkey(self):
+        return(self)
+    
+    @staticmethod        
+    def croissant():
+        return(self)        # thought this would return instance of class object Class . but. .
+                            # Class.croissant() > NameError: name 'self' is not defined
 
 class AboutMethodBindings(Koan):
     def test_methods_are_bound_to_an_object(self):
         obj = Class()
+        obj2 = Class()
+        
         self.assertEqual(True, obj.method.__self__ == obj)
+        # >>> obj = Class()
+        # >>> obj
+        # <__main__.Class object at 0x10a5410f0>
+        # >>> obj.method.__self__
+        # <__main__.Class object at 0x10a5410f0>
+        # >>> hex(id(obj))
+        # '0x10a5410f0'
+        # >>> obj.__self__                          # NO make sense since obj is __self__
+        # Traceback (most recent call last):
+        #   File "<stdin>", line 1, in <module>
+        # AttributeError: 'Class' object has no attribute '__self__'        <<< ??? TODO
+                                                                                      #
+        # >>> Class                                                                  <<
+        # <class '__main__.Class'>
+        # >>> Class.__self__
+        # Traceback (most recent call last):
+        #   File "<stdin>", line 1, in <module>
+        # AttributeError: type object 'Class' has no attribute '__self__'
+
+
+        #self.assertEqual(True, obj.__self__ == obj)    # AttributeError: 'Class' object has no attribute '__self__'
+
+        
 
     def test_methods_are_also_bound_to_a_function(self):
         obj = Class()
         self.assertEqual("parrot", obj.method())
         self.assertEqual(obj.method.__func__.__name__, 'method')
-        self.assertEqual(obj.method.__func__(obj), obj.method())        
+        self.assertEqual(obj.method.__func__(obj), obj.method())    # call func on obj    
         self.assertEqual(obj.method.__func__(obj), "parrot")
         # https://docs.python.org/3/reference/datamodel.html instance methods
 
@@ -99,7 +131,7 @@ class AboutMethodBindings(Koan):
         with self.assertRaises(AttributeError): obj.method.cherries = 3 # < EH? because obj method?
                                                                         # YES BOUND TO OBJECT
     def test_setting_attributes_on_methods_by_accessing_the_inner_function(self):
-        obj = Class()
+        obj = Class()                                   # way around the above restriction
         obj.method.__func__.cherries = 3                # TODO
         self.assertEqual(3, obj.method.cherries)        # example of why this is useful would be good here
 
@@ -126,24 +158,68 @@ class AboutMethodBindings(Koan):
     # ------------------------------------------------------------------
 
     # TODO TODO Go through these examples
-    # https://docs.python.org/3.7/howto/descriptor.html 
-    
+    # Descriptor How To Guide
+    # https://docs.python.org/3.7/howto/descriptor.html
+    # Quickly:
+    # In general, a descriptor is an object attribute with “binding behavior”, one whose attribute access has
+    # been overridden by methods in the descriptor protocol. Those methods are __get__(), __set__(), and
+    # __delete__(). If any of those methods are defined for an object, it is said to be a descriptor.
+    # 
+    # The default behavior for attribute access is to get, set, or delete the attribute from an object’s
+    # dictionary. For instance, a.x has a lookup chain starting with a.__dict__['x'], then
+    # type(a).__dict__['x'], and continuing through the base classes of type(a) excluding metaclasses.
+    # If the looked-up value is an object defining one of the descriptor methods, then Python may override the default behavior and invoke the descriptor method instead. Where this occurs in the precedence chain depends on which descriptor methods were defined.
+    # 
+    # Descriptors are a powerful, general purpose protocol. They are the mechanism behind properties, methods,
+    # static methods, class methods, and super(). They are used throughout Python itself to implement the new
+    # style classes introduced in version 2.2. Descriptors simplify the underlying C-code and offer a flexible
+    # set of new tools for everyday Python programs.
+        
     class BoundClass:
         def __get__(self, obj, cls):
+            print(f"BoundClass.__get__ {cls}")
             return (self, obj, cls)
-
-    binding = BoundClass()
+    
+    # inside AboutMethodBindings
+    binding = BoundClass()          # < accessed w/ self.binding # within class AboutMethodBindings
+                                    
 
     def test_get_descriptor_resolves_attribute_binding(self):
-        bound_obj, binding_owner, owner_type = self.binding
+        print("---")
+        print(f"test_get_descriptor_resolves_attribute_binding {self.__class__.__name__}")
+        print("-")
+        print(f"test_get_descriptor_resolves_attribute_binding {self.binding.__class__.__name__}")
+        print("-")
+        print(f"test_get_descriptor_resolves_attribute_binding {self.binding}")
+        print("---")
+                # ---
+                # test_get_descriptor_resolves_attribute_binding AboutMethodBindings
+                # -
+                # BoundClass.__get__ <class 'koans.about_method_bindings.AboutMethodBindings'>
+                # test_get_descriptor_resolves_attribute_binding tuple
+                # -
+                # BoundClass.__get__ <class 'koans.about_method_bindings.AboutMethodBindings'>
+                # test_get_descriptor_resolves_attribute_binding
+# bound_ob      #      (<koans.about_method_bindings.AboutMethodBindings.BoundClass object at 0x10f2d7dd8>,
+# binding_owner #       <koans.about_method_bindings.AboutMethodBindings testMethod=test_get_descriptor_resolves_attribute_binding>,
+# owner_type    #       <class 'koans.about_method_bindings.AboutMethodBindings'>)
+                # ---
+                # BoundClass.__get__ <class 'koans.about_method_bindings.AboutMethodBindings'>        
+        
+        
+        # self > AboutMethodBindings
+        # self.binding > tuple        
+        bound_obj, binding_owner, owner_type = self.binding # return a tuple (immutable list)
+                                                            # assigns it to each item on the left
+        
         # Look at BoundClass.__get__():
         #   bound_obj = self
         #   binding_owner = obj
         #   owner_type = cls
-
-        self.assertEqual("BoundClass", bound_obj.__class__.__name__)
-        self.assertEqual(__, binding_owner.__class__.__name__)
-        self.assertEqual(AboutMethodBindings, owner_type)
+                                                                        #   name => it's a string not a type!
+        self.assertEqual("BoundClass", bound_obj.__class__.__name__)    #  /
+        self.assertEqual('AboutMethodBindings', binding_owner.__class__.__name__) # <koans.about_method_bindings.AboutMethodBindings testMethod=test_get_descriptor_resolves_attribute_binding>
+        self.assertEqual(AboutMethodBindings, owner_type) # <class 'koans.about_method_bindings.AboutMethodBindings'>
 
     # ------------------------------------------------------------------
 
@@ -159,5 +235,39 @@ class AboutMethodBindings(Koan):
     def test_set_descriptor_changes_behavior_of_attribute_assignment(self):
         self.assertEqual(None, self.color.choice)
         self.color = 'purple'
-        self.assertEqual(__, self.color.choice)
+        self.assertEqual('purple', self.color.choice)
+
+
+
+
+
+# Experiments:
+# >>> Class
+# <class '__main__.Class'>
+# >>> Class.__self__
+# Traceback (most recent call last):
+#   File "<stdin>", line 1, in <module>
+# AttributeError: type object 'Class' has no attribute '__self__'
+# 
+# >>> id(Class)
+# 140409156202520
+# >>> type(Class)
+# <class 'type'>
+# >>> 
+# 
+# >>> dir
+# <built-in function dir>
+# >>> dir()
+# ['BoundClass', 'Class', 'MySpecialError', '__annotations__', '__builtins__', '__doc__', '__loader__', '__name__', '__package__', '__spec__', 'a', 'binding', 'c', 'cc', 'comprehension', 'count_of_three', 'd', 'decimal_places', 'e', 'empty_method', 'f', 'feast', 'foff', 'function', 'highlanders', 'i', 'is_even', 'list_of_eggs', 'list_of_meats', 'm', 'math', 'method_with_var_args', 'my_global_function', 'obj', 'one', 'p', 'pprint', 'random', 's', 'scotsmen', 'seq', 'string', 't', 'warriors']
+# 
+# >>> [type(x) for x in dir()] 
+# [<class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>]
+# 
+# >>> dir(140409156202520)    # this is same as dir(int)
+# ['__abs__', '__add__', '__and__', '__bool__', '__ceil__', '__class__', '__delattr__', '__dir__', '__divmod__', '__doc__', '__eq__', '__float__', '__floor__', '__floordiv__', '__format__', '__ge__', '__getattribute__', '__getnewargs__', '__gt__', '__hash__', '__index__', '__init__', '__init_subclass__', '__int__', '__invert__', '__le__', '__lshift__', '__lt__', '__mod__', '__mul__', '__ne__', '__neg__', '__new__', '__or__', '__pos__', '__pow__', '__radd__', '__rand__', '__rdivmod__', '__reduce__', '__reduce_ex__', '__repr__', '__rfloordiv__', '__rlshift__', '__rmod__', '__rmul__', '__ror__', '__round__', '__rpow__', '__rrshift__', '__rshift__', '__rsub__', '__rtruediv__', '__rxor__', '__setattr__', '__sizeof__', '__str__', '__sub__', '__subclasshook__', '__truediv__', '__trunc__', '__xor__', 'bit_length', 'conjugate', 'denominator', 'from_bytes', 'imag', 'numerator', 'real', 'to_bytes']
+# >>> dir(Class)
+# ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 'method']
+# >>> dir(int)
+# ['__abs__', '__add__', '__and__', '__bool__', '__ceil__', '__class__', '__delattr__', '__dir__', '__divmod__', '__doc__', '__eq__', '__float__', '__floor__', '__floordiv__', '__format__', '__ge__', '__getattribute__', '__getnewargs__', '__gt__', '__hash__', '__index__', '__init__', '__init_subclass__', '__int__', '__invert__', '__le__', '__lshift__', '__lt__', '__mod__', '__mul__', '__ne__', '__neg__', '__new__', '__or__', '__pos__', '__pow__', '__radd__', '__rand__', '__rdivmod__', '__reduce__', '__reduce_ex__', '__repr__', '__rfloordiv__', '__rlshift__', '__rmod__', '__rmul__', '__ror__', '__round__', '__rpow__', '__rrshift__', '__rshift__', '__rsub__', '__rtruediv__', '__rxor__', '__setattr__', '__sizeof__', '__str__', '__sub__', '__subclasshook__', '__truediv__', '__trunc__', '__xor__', 'bit_length', 'conjugate', 'denominator', 'from_bytes', 'imag', 'numerator', 'real', 'to_bytes']
+
 
