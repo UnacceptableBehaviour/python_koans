@@ -63,10 +63,13 @@ https://docs.python.org/3/library/unittest.html#
 https://docs.python.org/3/library/unittest.html#assert-methods
 
 ### Decorators
-https://python-3-patterns-idioms-test.readthedocs.io/en/latest/PythonDecorators.html
+https://python-3-patterns-idioms-test.readthedocs.io/en/latest/PythonDecorators.html 
 https://www.python-course.eu/python3_decorators.php
 https://stackoverflow.com/questions/1622943/timeit-versus-timing-decorator  << Timing EG
-used in scent.py
+Another decoratore example:  
+https://stackoverflow.com/questions/8759359/equivalent-of-func-from-c-in-python  
+used in scent.py  
+TODO - Ex w/ decorators  
 
 ### Sniffer package
 https://pypi.org/project/sniffer/
@@ -185,9 +188,12 @@ dir(obj)\
 With an argument, attempt to return a list of valid attributes for that object. Can be overloaded\
 https://docs.python.org/3/library/functions.html#dir
 
+## L25-27
+    git difftool bceed0417..3063bb313   # about_method_bindings.py
 ### Descriptor Protocol
 https://docs.python.org/3.7/howto/descriptor.html
 about_method_bindigs.py
+
 
 
 
