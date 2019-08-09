@@ -194,6 +194,13 @@ https://docs.python.org/3/library/functions.html#dir
 https://docs.python.org/3.7/howto/descriptor.html
 about_method_bindigs.py
 
+### Decorators
+
+
+### Python debugger
+https://docs.python.org/3/library/pdb.html
+Quick and dirty how to
+https://stackoverflow.com/questions/4929251/how-to-step-through-python-code-to-help-debug-issues
 
 
 
