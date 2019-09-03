@@ -12,9 +12,10 @@ import json
 from pprint import pprint 
 
     
-
-# def return_nutrinfo_dictionary():
+# 
+# def return_nutrinfo_dictionary(ingredient='name'):
 #     return {
+#             'name': ingredient,
 #             'servings': 0,
 #             'serving_size': 0,
 #             'yield': '0g',
@@ -26,11 +27,11 @@ from pprint import pprint
 #             
 # print("Nutridict")
 # # create content for json file
-# pprint({ 'sugar':return_nutrinfo_dictionary() })
-# pprint({ 'eggs':return_nutrinfo_dictionary() })
-# pprint({ 'flour':return_nutrinfo_dictionary() })
-# pprint({ 'milk':return_nutrinfo_dictionary() })
-# pprint({ 'pancakes':return_nutrinfo_dictionary() })
+# pprint({ 'sugar':return_nutrinfo_dictionary('sugar') })
+# pprint({ 'eggs':return_nutrinfo_dictionary('eggs') })
+# pprint({ 'flour':return_nutrinfo_dictionary('flour') })
+# pprint({ 'milk':return_nutrinfo_dictionary('milk') })
+# pprint({ 'pancakes':return_nutrinfo_dictionary('pancakes') })
 # print("<\n\n")
             
 # {'serving_size': 100.0, 'units':'g', 'n_En':0.0}
@@ -70,6 +71,7 @@ class IngredientsDB:
     __ingredient_db = {}
     __ingredients_loaded = False
     __instance = None
+    __file_locked = False
 
     @staticmethod
     def getInstance():
@@ -97,28 +99,46 @@ class IngredientsDB:
             except Exception as e:
                 print("WARNING Exception raised: getInstance FAILED to load DB")
                 print(f"\n***\n{e} \n<")                        
-            
+    
+    @staticmethod
+    def __len__():
+        return len(IngredientsDB.__ingredient_db.keys()) 
 
     @staticmethod
-    def ingredientLookUp(ingredient, nutridict={}):
-                
+    def get(ingredient):                
         if ingredient in IngredientsDB.__ingredient_db:
             return IngredientsDB.__ingredient_db[ingredient]
         else:
-            #addIngredientToDB(ingredient, nutridict)
-            print("Err . . implement addIngredientToDB() please")
+            return None
     
-    # @staticmethod
-    # def addIngredientToDB(ingredient, nutridict={}):
-    #     ingredient_db[ingredient] = len(ingredient_db.keys) + 1
-    #     try:
-    #         with open('ingredient_db.json', 'w') as f:
-    #             f.write(json.dumps(ingredient_db))
-    #     
-    #     # https://realpython.com/the-most-diabolical-python-antipattern/    
-    #     except Exception as e:
-    #         print("WARNING Exception raised")
-    #         print(f"\n***\n{e} \n<")
+    @staticmethod
+    def set(ingredient, nutridict={}):
+        
+        # lock resource
+        if IngredientsDB.__file_locked == False:
+            IngredientsDB.__ingredient_db[ingredient] = nutridict
+        else:
+            # learn about threads & resource locks in python!
+            raise NotImplementedError("Surprise in a sequential environment!")
+
+    @staticmethod
+    def commit():        
+        # lock resource
+        IngredientsDB.__file_locked = True
+                    
+        try:
+            with open('ingredient_db.json', 'w') as f:
+                f.write(json.dumps(ingredient_db))
+        
+        # https://realpython.com/the-most-diabolical-python-antipattern/    
+        except Exception as e:
+            print("WARNING FAILED to commit DB to disk")
+            print(f"\n***\n{e} \n<")
+
+        else:
+            IngredientsDB.__file_locked = False
+
+
 
 # creating ingredientes
 class Ingredient:    
@@ -148,7 +168,9 @@ print(type(ingredient_db2))
 print(len(ingredient_db2))
 print(id(ingredient_db2))
 
-print("\n--> ingredient_db3")
-print(type(ingredient_db3))
-print(len(ingredient_db3))
-print(id(ingredient_db3))
+# print("\n--> ingredient_db3")
+# print(type(ingredient_db3))
+# print(len(ingredient_db3))
+# print(id(ingredient_db3))
+# 
+pprint( ingredient_db.get('flour') )
