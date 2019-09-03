@@ -65,39 +65,45 @@ class Nutrients:
 
 
 # How to create a singleton for the Nutrients DB?
-class IngredientDB:
+class IngredientsDB:
     __ingredient_db_file = 'ingredient_db.json'
     __ingredient_db = {}
-    ingredients_loaded = False
-    
+    __ingredients_loaded = False
+    __instance = None
+
+    @staticmethod
+    def getInstance():
+        if IngredientsDB.__instance == None:
+            IngredientsDB()
+            
+        return IngredientsDB.__instance
+
         
     # load DB if not loaded
     def __init__(self):
-        IngredientDB.loadIngredientsDB()                    
+        if IngredientsDB.__instance != None:
+            raise Exception("Access IngredientsDB via getInstance class method")
+        else:
+            IngredientsDB.__instance = self
 
-
-    @staticmethod
-    def loadIngredientsDB():
-        if IngredientDB.ingredients_loaded == False:
+        if IngredientsDB.__ingredients_loaded == False:
             try:
-                with open(IngredientDB.__ingredient_db_file, 'r') as f:
+                with open(IngredientsDB.__ingredient_db_file, 'r') as f:
                     json_db = f.read()
-                    IngredientDB.__ingredient_db = json.loads(json_db)                    
-                    IngredientDB.ingredients_loaded = True                    
+                    IngredientsDB.__ingredient_db = json.loads(json_db)                    
+                    IngredientsDB.__ingredients_loaded = True                    
             
             # https://realpython.com/the-most-diabolical-python-antipattern/
             except Exception as e:
-                print("WARNING Exception raised: loadIngredientsDB")
-                print(f"\n***\n{e} \n<")
+                print("WARNING Exception raised: getInstance FAILED to load DB")
+                print(f"\n***\n{e} \n<")                        
             
-        return( IngredientDB.__ingredient_db )
-    
 
     @staticmethod
     def ingredientLookUp(ingredient, nutridict={}):
                 
-        if ingredient in IngredientDB.__ingredient_db:
-            return IngredientDB.__ingredient_db[ingredient]
+        if ingredient in IngredientsDB.__ingredient_db:
+            return IngredientsDB.__ingredient_db[ingredient]
         else:
             #addIngredientToDB(ingredient, nutridict)
             print("Err . . implement addIngredientToDB() please")
@@ -123,18 +129,26 @@ class Ingredient:
         self.nutrients = Nutrients(ingredient, nutridict)
 
 
-ingredient_db = IngredientDB.loadIngredientsDB()
-ingredient_db2 = IngredientDB.loadIngredientsDB()            # should be the same DB
-print("ingredient_db")
-print(type(ingredient_db))
-print(len(ingredient_db))
-print(id(ingredient_db))
-print("ingredient_db2")
-print(type(ingredient_db2))
-print(len(ingredient_db2))
-print(id(ingredient_db2))
-
+ingredient_db = IngredientsDB.getInstance()
+ingredient_db2 = IngredientsDB.getInstance()      # should be the same DB
+#ingredient_db3 = IngredientsDB()                 # Exception: Access IngredientsDB via getInstance class method
 
 print("= = SHOW GLOBAL VARLIST")
 pprint(globals())
 print("<\n\n")
+
+print("= = SHOW protagonists")
+print("--> ingredient_db")
+print(type(ingredient_db))
+print(len(ingredient_db))
+print(id(ingredient_db))
+
+print("\n--> ingredient_db2")
+print(type(ingredient_db2))
+print(len(ingredient_db2))
+print(id(ingredient_db2))
+
+print("\n--> ingredient_db3")
+print(type(ingredient_db3))
+print(len(ingredient_db3))
+print(id(ingredient_db3))
