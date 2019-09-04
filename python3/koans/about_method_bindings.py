@@ -177,7 +177,7 @@ class AboutMethodBindings(Koan):
         
     class BoundClass:
         def __get__(self, obj, cls):
-            print(f"BoundClass.__get__ {cls}")
+            print(f"BoundClass.__get__ \n\tOBJ: {obj}\n\tCLS:  {cls}")
             return (self, obj, cls)
     
     # inside AboutMethodBindings
@@ -185,13 +185,13 @@ class AboutMethodBindings(Koan):
                                     
 
     def test_get_descriptor_resolves_attribute_binding(self):
-        print("---")
+        print("---S")
         print(f"test_get_descriptor_resolves_attribute_binding {self.__class__.__name__}")
-        print("-")
+        print("-A")
         print(f"test_get_descriptor_resolves_attribute_binding {self.binding.__class__.__name__}")
-        print("-")
+        print("-B")
         print(f"test_get_descriptor_resolves_attribute_binding {self.binding}")
-        print("---")
+        print("---E")
                 # ---
                 # test_get_descriptor_resolves_attribute_binding AboutMethodBindings
                 # -

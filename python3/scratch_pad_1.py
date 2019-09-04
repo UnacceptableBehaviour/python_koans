@@ -80,30 +80,6 @@ class IngredientsDB:
             
         return IngredientsDB.__instance
 
-        
-    # load DB if not loaded
-    def __init__(self):
-        if IngredientsDB.__instance != None:
-            raise Exception("Access IngredientsDB via getInstance class method")
-        else:
-            IngredientsDB.__instance = self
-
-        if IngredientsDB.__ingredients_loaded == False:
-            try:
-                with open(IngredientsDB.__ingredient_db_file, 'r') as f:
-                    json_db = f.read()
-                    IngredientsDB.__ingredient_db = json.loads(json_db)                    
-                    IngredientsDB.__ingredients_loaded = True                    
-            
-            # https://realpython.com/the-most-diabolical-python-antipattern/
-            except Exception as e:
-                print("WARNING Exception raised: getInstance FAILED to load DB")
-                print(f"\n***\n{e} \n<")                        
-    
-    @staticmethod
-    def __len__():
-        return len(IngredientsDB.__ingredient_db.keys()) 
-
     @staticmethod
     def get(ingredient):                
         if ingredient in IngredientsDB.__ingredient_db:
@@ -137,6 +113,31 @@ class IngredientsDB:
 
         else:
             IngredientsDB.__file_locked = False
+        
+    # load DB if not loaded
+    def __init__(self):
+        if IngredientsDB.__instance != None:
+            raise Exception("Access IngredientsDB via getInstance class method")
+        else:
+            IngredientsDB.__instance = self
+
+        if IngredientsDB.__ingredients_loaded == False:
+            try:
+                with open(IngredientsDB.__ingredient_db_file, 'r') as f:
+                    json_db = f.read()
+                    IngredientsDB.__ingredient_db = json.loads(json_db)                    
+                    IngredientsDB.__ingredients_loaded = True                    
+            
+            # https://realpython.com/the-most-diabolical-python-antipattern/
+            except Exception as e:
+                print("WARNING Exception raised: getInstance FAILED to load DB")
+                print(f"\n***\n{e} \n<")                        
+    
+    @staticmethod
+    def __len__():
+        return len(IngredientsDB.__ingredient_db.keys()) 
+
+
 
 
 
