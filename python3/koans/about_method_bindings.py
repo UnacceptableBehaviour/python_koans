@@ -168,7 +168,9 @@ class AboutMethodBindings(Koan):
     # The default behavior for attribute access is to get, set, or delete the attribute from an object’s
     # dictionary. For instance, a.x has a lookup chain starting with a.__dict__['x'], then
     # type(a).__dict__['x'], and continuing through the base classes of type(a) excluding metaclasses.
-    # If the looked-up value is an object defining one of the descriptor methods, then Python may override the default behavior and invoke the descriptor method instead. Where this occurs in the precedence chain depends on which descriptor methods were defined.
+    # If the looked-up value is an object defining one of the descriptor methods, then Python may override
+    # the default behavior and invoke the descriptor method instead. Where this occurs in the precedence
+    # chain depends on which descriptor methods were defined.
     # 
     # Descriptors are a powerful, general purpose protocol. They are the mechanism behind properties, methods,
     # static methods, class methods, and super(). They are used throughout Python itself to implement the new
@@ -181,8 +183,11 @@ class AboutMethodBindings(Koan):
             return (self, obj, cls)
     
     # inside AboutMethodBindings
+    # binding is to which scope the variable/method belongs
+    # https://docs.python.org/3/tutorial/classes.html#scopes-and-namespaces-example
+    #
     binding = BoundClass()          # < accessed w/ self.binding # within class AboutMethodBindings
-                                    
+                                    # binding is an instance of BoundClass
 
     def test_get_descriptor_resolves_attribute_binding(self):
         print("---S")
@@ -192,20 +197,23 @@ class AboutMethodBindings(Koan):
         print("-B")
         print(f"test_get_descriptor_resolves_attribute_binding {self.binding}")
         print("---E")
-                # ---
+                # ---S
                 # test_get_descriptor_resolves_attribute_binding AboutMethodBindings
-                # -
-                # BoundClass.__get__ <class 'koans.about_method_bindings.AboutMethodBindings'>
-                # test_get_descriptor_resolves_attribute_binding tuple
-                # -
-                # BoundClass.__get__ <class 'koans.about_method_bindings.AboutMethodBindings'>
+                # -A
+                # BoundClass.__get__ 
+# print from    # 	OBJ: test_get_descriptor_resolves_attribute_binding (koans.about_method_bindings.AboutMethodBindings)
+#  __get__      # 	CLS:  <class 'koans.about_method_bindings.AboutMethodBindings'>
+                # test_get_descriptor_resolves_attribute_binding tuple  << reurned (self, obj, cls).
+                # -B
+                # BoundClass.__get__ 
+                # 	OBJ: test_get_descriptor_resolves_attribute_binding (koans.about_method_bindings.AboutMethodBindings)
+                # 	CLS:  <class 'koans.about_method_bindings.AboutMethodBindings'>
                 # test_get_descriptor_resolves_attribute_binding
-# bound_ob      #      (<koans.about_method_bindings.AboutMethodBindings.BoundClass object at 0x10f2d7dd8>,
-# binding_owner #       <koans.about_method_bindings.AboutMethodBindings testMethod=test_get_descriptor_resolves_attribute_binding>,
-# owner_type    #       <class 'koans.about_method_bindings.AboutMethodBindings'>)
-                # ---
-                # BoundClass.__get__ <class 'koans.about_method_bindings.AboutMethodBindings'>        
-        
+# bound_ob      #     (<koans.about_method_bindings.AboutMethodBindings.BoundClass object at 0x1066aba20>,
+# binding_owner #      <koans.about_method_bindings.AboutMethodBindings testMethod=test_get_descriptor_resolves_attribute_binding>,
+# owner_type    #      <class 'koans.about_method_bindings.AboutMethodBindings'>)
+                # ---E
+                
         
         # self > AboutMethodBindings
         # self.binding > tuple        
@@ -227,14 +235,15 @@ class AboutMethodBindings(Koan):
         def __init__(self):
             self.choice = None
 
-        def __set__(self, obj, val):
+        def __set__(self, obj, val):        # TODO 
             self.choice = val
 
     color = SuperColor()
 
     def test_set_descriptor_changes_behavior_of_attribute_assignment(self):
         self.assertEqual(None, self.color.choice)
-        self.color = 'purple'
+        #print(self.color.mro())     # TODO ? AttributeError: 'SuperColor' object has no attribute 'mro'
+        self.color = 'purple'                   
         self.assertEqual('purple', self.color.choice)
 
 
