@@ -107,6 +107,11 @@ https://realpython.com/instance-class-and-static-methods-demystified/
 ### Instance, Class, Static VARS
 https://stackoverflow.com/questions/5690888/variable-scopes-in-python-classes
 
+### Classes Scope / Namespaces
+https://docs.python.org/3/tutorial/classes.html#scopes-and-namespaces-example
+
+
+
 
 #### Aside - validating JSON
 https://jsonlint.com/
@@ -163,18 +168,18 @@ https://www.freecodecamp.org/news/how-and-why-you-should-use-python-generators-f
 http://buildingskills.itmaybeahack.com/book/python-2.6/html/p03/p03c05_properties.html
 about_classes.py
 https://www.tutorialspoint.com/What-is-the-difference-between-attributes-and-properties-in-python
-How properties work - Descriptor Protocl
+How properties work - Descriptor Protocol
 https://docs.python.org/3.7/howto/descriptor.html -(see properties)
 
 
 ## L22-24
 ### = =  Python ANTI-PATTERNS
-https://docs.quantifiedcode.com/python-anti-patterns/correctness/exit_must_accept_three_arguments.html\
-https://docs.quantifiedcode.com/python-anti-patterns/index.html\
+https://docs.quantifiedcode.com/python-anti-patterns/correctness/exit_must_accept_three_arguments.html \
+https://docs.quantifiedcode.com/python-anti-patterns/index.html \
 
 ### Python Context Manager Protocol
-Intro (and Exersize)\
-https://alysivji.github.io/managing-resources-with-context-managers-pythonic.html\
+Intro (and Exercise)\
+https://alysivji.github.io/managing-resources-with-context-managers-pythonic.html \
 More 3.7\
 https://docs.python.org/3.7/reference/datamodel.html#with-statement-context-managers\
 
@@ -193,17 +198,32 @@ https://docs.python.org/3/library/functions.html#dir
 ### Descriptor Protocol
 https://docs.python.org/3.7/howto/descriptor.html
 about_method_bindigs.py
+Overriding __get__ __set__ __delete__ 
 
 ### Decorators
+Decorators, defining function insided functions . . . Closure Pattern
+https://www.datacamp.com/community/tutorials/decorators-python
+
+Decorators python 2.7
+https://www.thecodeship.com/patterns/guide-to-python-function-decorators/ \
 
 
 ### Python debugger
 https://docs.python.org/3/library/pdb.html
 Quick and dirty how to
 https://stackoverflow.com/questions/4929251/how-to-step-through-python-code-to-help-debug-issues
+Hacking together a Graphical Debugger
+https://www.freecodecamp.org/news/hacking-together-a-simple-graphical-python-debugger-efe7e6b1f9a8/
 
 
 
+
+
+
+more . . .
+
+## Design Patterns in Python
+https://www.tutorialspoint.com/python_design_patterns/python_design_patterns_singleton.htm
 
 
 ## Other koans on github
