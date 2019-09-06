@@ -6,7 +6,7 @@
 #
 # and lots of head scratching and tests!
 #
-
+import re
 import sys
 import json
 from pprint import pprint 
@@ -76,19 +76,92 @@ print("\n")
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # 
-    #  Decorators
+    #  Decorators - https://www.datacamp.com/community/tutorials/decorators-python
     # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 
 def print_message(message):
-    decorate = "Outer limits"                   # functions declared in same scope have access to this
+    decorate = "Outer Limits"                   # functions declared in same scope have access to this scope
     
     def message_sender():
-        #decorate = "Inner Limmits"
-        print(message, decorate)
+        #decorate = "Inner Limits"              # < comment#
+        print(message, decorate)                           #  
+                                                           #  
+    message_sender()                                       #  
+                                                           #  
+print_message("Welcome to the")                 # Welcome to the Outer limits
 
-    message_sender()
 
-print_message("Welcome to the")
+# # # # # # # # # # # # # # # # # # # # # # # #
+# implementin a decorator
+def uppercase_decorator(function):
+    def wrapper():
+        func = function()
+        make_uppercase = func.upper()
+        return make_uppercase
+
+    return wrapper
+
+@uppercase_decorator
+def say_hi():
+    return 'hello there'
+
+decorate = uppercase_decorator(say_hi)
+print(decorate())
+
+print(say_hi())                                 # runs decorator - other code still works!
+print()
+# # # # # # # # # # # # # # # # # # # # # # # #
+
+pancakes_w_each = '''200g flour     # sieved
+220g (4) eggs   # beaten
+200g     milk
+3g salt    # all whisked together'''
+
+pancakes = '''200g flour     # sieved
+220g eggs   # beaten
+200g     milk
+3g salt    # all whisked together'''
+
+
+def split_lines_into_qty_ingredient_prep(f):
+    def wrapper():
+        list_of_lines = f()                     # 
+        list_of_ingredients = []
+        
+        for l in list_of_lines:
+            qty_ingredient = l
+            prep = ''
+            match = re.match(r'^(.*?)#(.*?)$', l, re.DOTALL )
+            if match:
+                prep = match.group(2)
+                qty_ingredient = match.group(1).strip()
+            
+            match = re.match(r'^(\d+g|kg|l|ml)(.*?)$', qty_ingredient, re.DOTALL)
+            if match:
+                list_of_ingredients.append({"qty": match.group(1), "ingredient": match.group(2).strip(), "prep":prep })
+                        
+        return list_of_ingredients
+    
+    return wrapper
+
+
+def split_recipe_into_lines(f):
+    def wrapper():
+        recipe = f().lower()
+        return recipe.split("\n")
+
+    return wrapper
+
+
+@split_lines_into_qty_ingredient_prep
+@split_recipe_into_lines
+def get_recipe():
+    data_stream = pancakes
+    return data_stream
+
+
+for line in get_recipe():
+    print(line)
 
