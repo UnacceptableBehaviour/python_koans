@@ -164,4 +164,3 @@ def get_recipe():
 
 for line in get_recipe():
     print(line)
-
