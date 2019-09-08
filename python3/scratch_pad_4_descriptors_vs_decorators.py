@@ -107,22 +107,29 @@ def uppercase_decorator(function):
 def say_hi():
     return 'hello there'
 
+print("\n= = = = = simple decorator")
+
 decorate = uppercase_decorator(say_hi)
 print(decorate())
 
 print(say_hi())                                 # runs decorator - other code still works!
 print()
-# # # # # # # # # # # # # # # # # # # # # # # #
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# stacking decorators - not sure if this is good practice but it in the example
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 pancakes_w_each = '''200g flour     # sieved
 220g (4) eggs   # beaten
 200g     milk
-3g salt    # all whisked together'''
+3g salt    # whisked milk eggs and flour together'''
 
 pancakes = '''200g flour     # sieved
 220g eggs   # beaten
 200g     milk
-3g salt    # all whisked together'''
+3g salt    # whisked milk eggs and flour together'''
+
 
 
 def split_lines_into_qty_ingredient_prep(f):
@@ -161,6 +168,64 @@ def get_recipe():
     data_stream = pancakes
     return data_stream
 
-
+print("\n= = = = = stacked decorator - decorated decorator")
 for line in get_recipe():
     print(line)
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# passing args 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+def get_fdict_instance():
+    f_dict = {}
+    return f_dict
+
+# take a sentence split it into words and add them to a frequency dictionary
+def split_and_downcase_freq(function):
+    f_dict = get_fdict_instance()               # wrapper code has access to this
+    
+    def wrapper(text_arg):
+                
+        # split the return using white space
+        words = get_word_from_recipe(text_arg)
+        #                             ^
+        # call function being wrapped |
+        
+        for word in words:
+            if word in f_dict:
+                f_dict[word] += 1
+            else:
+                f_dict[word] = 1
+        
+        print("--------found these words-------S")
+        pprint(f_dict)
+        print("--------found these words-------E")
+        
+        return words
+            
+    return(wrapper)
+
+
+
+
+def get_word_from_recipe(recipe):
+    # process recipe to plain text return it
+    processed = re.split(r'\s+', recipe.lower() )
+    
+    # strip out # - comment symbols
+    return [ word for word in processed if word != '#']
+
+
+@split_and_downcase_freq
+def get_word_from_recipe_d(recipe):
+    return get_word_from_recipe(recipe)
+    
+print("\n= = = = = decorator - with arguments")
+print("undecorated")
+print(get_word_from_recipe(pancakes_w_each))
+
+
+print("\n\ndecorated")
+print(get_word_from_recipe_d(pancakes_w_each))
+
