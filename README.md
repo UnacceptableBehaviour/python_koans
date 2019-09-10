@@ -207,6 +207,26 @@ https://www.datacamp.com/community/tutorials/decorators-python
 Decorators python 2.7
 https://www.thecodeship.com/patterns/guide-to-python-function-decorators/ \
 
+functools 
+https://docs.python.org/3.6/library/functools.html
+
+LBYL - Look Before You Leap
+Characterised by bounds checking, key checks etc, think C. Can lead to race conditions w/o resource locks
+https://docs.python.org/3.6/glossary.html#term-lbyl
+
+EAFP - Easier to Ask Frogiveness Than Permission
+Characterised by presence of exception blocks, try, except, else
+https://docs.python.org/3.6/glossary.html#term-eafp
+
+functools.partial
+Create a partial object with RO attributes
+https://docs.python.org/3.6/library/functools.html#functools.partial
+https://docs.python.org/3.6/library/functools.html#partial-objects
+
+
+
+
+
 
 ### Python debugger
 https://docs.python.org/3/library/pdb.html
@@ -214,10 +234,6 @@ Quick and dirty how to
 https://stackoverflow.com/questions/4929251/how-to-step-through-python-code-to-help-debug-issues
 Hacking together a Graphical Debugger
 https://www.freecodecamp.org/news/hacking-together-a-simple-graphical-python-debugger-efe7e6b1f9a8/
-
-
-
-
 
 
 more . . .
