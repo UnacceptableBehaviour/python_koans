@@ -20,7 +20,7 @@ class AboutExceptions(Koan):
         # >>> type(MySpecialError.mro()[0].__name__)
         # <class 'str'>
 
-        mro = self.MySpecialError.mro()                     # mro - method resolution order - query inheritance chain
+        mro = self.MySpecialError.mro()    # mro - method resolution order - query inheritance chain
         self.assertEqual('MySpecialError', mro[0].__name__)
         self.assertEqual('RuntimeError', mro[1].__name__)
         self.assertEqual('Exception', mro[2].__name__)
@@ -31,7 +31,7 @@ class AboutExceptions(Koan):
         from pprint import pprint
         result = None
         try:
-            self.fail("Oops")                                           # whats this?
+            self.fail("Oops")           # whats this? TODO
         except Exception as ex:
             result = 'exception handled'
             print("--investigating--")
