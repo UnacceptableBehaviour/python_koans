@@ -189,8 +189,8 @@ def split_and_downcase_freq(function):
                 
         # split the return using white space
         words = function(text_arg)
-        #                             ^
-        # call function being wrapped |
+        #           ^
+        # call function being wrapped
         
         for word in words:
             if word in f_dict:
