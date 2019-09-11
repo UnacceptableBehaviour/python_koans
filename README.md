@@ -219,10 +219,13 @@ Characterised by presence of exception blocks, try, except, else
 https://docs.python.org/3.6/glossary.html#term-eafp
 
 functools.partial
-Create a partial object with RO attributes
+Create a partial object with Read Only attributes
 https://docs.python.org/3.6/library/functools.html#functools.partial
 https://docs.python.org/3.6/library/functools.html#partial-objects
+Keyword argument: func(keyword_arg = 6, keyword_arg2 = ‘poof the MD’)
 
+## Standard Library
+https://docs.python.org/3/library/
 
 
 

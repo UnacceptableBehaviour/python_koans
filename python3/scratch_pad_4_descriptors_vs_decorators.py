@@ -112,7 +112,7 @@ print("\n= = = = = simple decorator")
 decorate = uppercase_decorator(say_hi)
 print(decorate())
 
-print(say_hi())                                 # runs decorator - other code still works!
+print(say_hi())      # HELLO THERE                    # runs decorator - other code still works!
 print()
 
 
@@ -188,7 +188,7 @@ def split_and_downcase_freq(function):
     def wrapper(text_arg):
                 
         # split the return using white space
-        words = get_word_from_recipe(text_arg)
+        words = function(text_arg)
         #                             ^
         # call function being wrapped |
         
