@@ -14,24 +14,27 @@ from .local_module_with_all_defined import *
 
 class AboutModules(Koan):
     def test_importing_other_python_scripts_as_modules(self):
-        from . import local_module  # local_module.py
+        from . import local_module  # local_module.py                       . this directory
+        # from ..   => ValueError: attempted relative import beyond top-level package
+        # TODO test if this works from deeper dir
 
         duck = local_module.Duck()
-        self.assertEqual(__, duck.name)
+        self.assertEqual("Daffy", duck.name)
 
     def test_importing_attributes_from_classes_using_from_keyword(self):
-        from .local_module import Duck
+        from .local_module import Duck      # no module qualifier needed to use Duck class
+        #      ^^
 
         duck = Duck()  # no module qualifier needed this time
-        self.assertEqual(__, duck.name)
+        self.assertEqual("Daffy", duck.name)
 
     def test_we_can_import_multiple_items_at_once(self):
         from . import jims, joes
 
         jims_dog = jims.Dog()
         joes_dog = joes.Dog()
-        self.assertEqual(__, jims_dog.identify())
-        self.assertEqual(__, joes_dog.identify())
+        self.assertEqual("jims dog", jims_dog.identify())
+        self.assertEqual("joes dog", joes_dog.identify())
 
     def test_importing_all_module_attributes_at_once(self):
         """
