@@ -11,6 +11,7 @@ class Hamster:
     def name(self):
         return "Phil"
 
+#class SecretSquirrel:
 class _SecretSquirrel:
     @property
     def name(self):
