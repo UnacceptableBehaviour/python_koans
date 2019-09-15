@@ -36,6 +36,16 @@ class AboutModules(Koan):
         self.assertEqual("jims dog", jims_dog.identify())
         self.assertEqual("joes dog", joes_dog.identify())
 
+    def test_dual_import_conflict_resolution(self):
+        from .jims import Dog
+        from .joes import Dog
+
+        whos_dog = Dog()
+        print("whos_dog:")
+        print(type(whos_dog))   # last imported - koans.joes.Dog in this case
+        print(Dog.mro())
+        self.assertEqual("joes dog", whos_dog.identify())
+
     def test_importing_all_module_attributes_at_once(self):
         """
         importing all attributes at once is done like so:
@@ -54,13 +64,22 @@ class AboutModules(Koan):
         #self.assertEqual("Mr Anonymous", private_squirrel.name)
         
         with self.assertRaises(NameError):
-            private_squirrel = _SecretSquirrel()
+            private_squirrel = _SecretSquirrel()        # 
+
+        lizard = _Velociraptor()                        # not hidden?
+        self.assertEqual("Cuddles", lizard.name)        # _Velociraptor is listed in the module tuple __all__ (attribute I think)
+                                                        # NameError: name '_Velociraptor' is not defined if removed from __all__
 
     def test_private_attributes_are_still_accessible_in_modules(self):
         from .local_module import Duck  # local_module.py
 
         duck = Duck()
-        self.assertEqual(__, duck._password)
+        self.assertEqual('password', duck._password)
+        
+        #self.assertEqual('password', duck._Duck__password)  # accessing mangled double underscore
+                                                             # note NO dot - _Duck.__password
+                                                             #                    ^
+                                                             
         # module level attribute hiding doesn't affect class attributes
         # (unless the class itself is hidden).
 
@@ -72,12 +91,14 @@ class AboutModules(Koan):
 
         # 'Goat' is on the __all__ list
         goat = Goat()
-        self.assertEqual(__, goat.name)
+        self.assertEqual("George", goat.name)
 
-        # How about velociraptors?
+        # How about velociraptors? underscore so shoul be private right!? WRONG!
         lizard = _Velociraptor()
-        self.assertEqual(__, lizard.name)
+        self.assertEqual("Cuddles", lizard.name)
+        # It goes back to privet ive removed from __all__ (attribute - I think)
+        # NameError: name '_Velociraptor' is not defined if removed from __all__
 
         # SecretDuck? Never heard of her!
-        with self.assertRaises(___):
+        with self.assertRaises(NameError):
             duck = SecretDuck()
