@@ -12,37 +12,67 @@ class AboutClassAttributes(Koan):
         pass
 
     def test_objects_are_objects(self):
-        fido = self.Dog()
-        self.assertEqual(__, isinstance(fido, object))
+        fido = self.Dog()                 # fido is an object of type Dog
+        # print(fido.__class__)           # <class 'koans.about_class_attributes.AboutClassAttributes.Dog'>
+        # print(fido.__class__.__name__)  # Dog
 
-    def test_classes_are_types(self):
-        self.assertEqual(__, self.Dog.__class__ == type)
+        #print(self.Dog.mro()) # show class hierarchy
+        #[<class 'koans.about_class_attributes.AboutClassAttributes.Dog'>, <class 'object'>]
+        self.assertEqual(True, isinstance(fido, object))
+
+    def test_classes_are_types(self):       # self.Dog is a type (a class object)
+        # print(self.Dog.__class__)           # <class 'type'>
+        # print(self.Dog.__class__.__name__)  # type
+        self.assertEqual(True, self.Dog.__class__ == type)
 
     def test_classes_are_objects_too(self):
-        self.assertEqual(__, issubclass(self.Dog, object))
+        self.assertEqual(True, issubclass(self.Dog, object))
 
     def test_objects_have_methods(self):
         fido = self.Dog()
-        self.assertEqual(__, len(dir(fido)))
+        print('dir(fido)')
+        print(dir(fido)) # ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__',
+                         # '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__',
+        # '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__',
+        # '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__',
+        # '__subclasshook__', '__weakref__']
+        self.assertEqual(26, len(dir(fido)))
 
     def test_classes_have_methods(self):
-        self.assertEqual(__, len(dir(self.Dog)))
+        self.assertEqual(26, len(dir(self.Dog)))
 
     def test_creating_objects_without_defining_a_class(self):
         singularity = object()
-        self.assertEqual(__, len(dir(singularity)))
+        print('dir(singularity)')
+        print(dir(singularity))                      # attributes
+        # fido:         ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__']
+        # singularity:  ['__class__', '__delattr__',             '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__',               '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__']
+        self.assertEqual(23, len(dir(singularity)))
 
     def test_defining_attributes_on_individual_objects(self):
         fido = self.Dog()
         fido.legs = 4
-
-        self.assertEqual(__, fido.legs)
+        #self.assertEqual(__, fido.__weakref__) # None
+        self.assertEqual('koans.about_class_attributes', fido.__module__)
+        self.assertEqual(4, fido.__dict__['legs'])
+        self.assertEqual(4, fido.legs)
 
     def test_defining_functions_on_individual_objects(self):
         fido = self.Dog()
-        fido.wag = lambda : 'fidos wag'
+        # lambda function object -   lambda x: return(do something with x)
+        #
+        # def square_root(x): return math.sqrt(x)       # < using def
+        #
+        # square_root = lambda x: math.sqrt(x)          # < equivalent lambda        
+        
+        def bark():
+            return 'bark, bark, bark . . WOOF!'
 
-        self.assertEqual(__, fido.wag())
+        fido.bark = bark        
+        fido.wag = lambda : 'fidos wag'             # lambda x=null: return 'fidos wag'
+
+        self.assertEqual('fidos wag', fido.wag())
+        self.assertEqual('bark, bark, bark . . WOOF!', fido.bark())
 
     def test_other_objects_are_not_affected_by_these_singleton_functions(self):
         fido = self.Dog()
@@ -50,9 +80,9 @@ class AboutClassAttributes(Koan):
 
         def wag():
             return 'fidos wag'
-        fido.wag = wag
-
-        with self.assertRaises(___): rover.wag()
+        fido.wag = wag                                         # singleton function 
+                                                               # 
+        with self.assertRaises(AttributeError): rover.wag()    # so rover wont do fidos wag!!
 
     # ------------------------------------------------------------------
 
@@ -63,31 +93,31 @@ class AboutClassAttributes(Koan):
         def bark(self):
             return "instance bark"
 
-        def growl(self):
-            return "instance growl"
-
-        @staticmethod
-        def bark():
-            return "staticmethod bark, arg: None"
-
-        @classmethod
-        def growl(cls):
-            return "classmethod growl, arg: cls=" + cls.__name__
-
-    def test_since_classes_are_objects_you_can_define_singleton_methods_on_them_too(self):
-        self.assertRegex(self.Dog2.growl(), __)
-
-    def test_classmethods_are_not_independent_of_instance_methods(self):
-        fido = self.Dog2()
-        self.assertRegex(fido.growl(), __)
-        self.assertRegex(self.Dog2.growl(), __)
-
-    def test_staticmethods_are_unbound_functions_housed_in_a_class(self):
-        self.assertRegex(self.Dog2.bark(), __)
-
-    def test_staticmethods_also_overshadow_instance_methods(self):
-        fido = self.Dog2()
-        self.assertRegex(fido.bark(), __)
+        def growl(self):                    # whats the point of this if class method runs instead?#
+            return "instance growl"                                                                #
+                                                                                                   #
+        @staticmethod                                                                              #
+        def bark():                                                                                #
+            return "staticmethod bark, arg: None"                                                  #
+                                                                                                   #
+        @classmethod                                                                               #
+        def growl(cls):                                                                            #
+            return "classmethod growl, arg: cls=" + cls.__name__                                   #
+                                                                                                   #
+    def test_since_classes_are_objects_you_can_define_singleton_methods_on_them_too(self):         #
+        self.assertRegex(self.Dog2.growl(), "classmethod growl, arg: cls=Dog2")                    #
+                                                                                                   #
+    def test_classmethods_are_not_independent_of_instance_methods(self):                           #
+        fido = self.Dog2()                                                                         #
+        self.assertRegex(fido.growl(), "classmethod growl, arg: cls=Dog2")          # TODO why not "instance growl" ??
+        self.assertRegex(self.Dog2.growl(), "classmethod growl, arg: cls=Dog2")                    #
+                                                                                                   #
+    def test_staticmethods_are_unbound_functions_housed_in_a_class(self):                          #
+        self.assertRegex(self.Dog2.bark(), "staticmethod bark, arg: None")                         #
+                                                                                                   #
+    def test_staticmethods_also_overshadow_instance_methods(self):                                 #
+        fido = self.Dog2()                                                                         #
+        self.assertRegex(fido.bark(), "staticmethod bark, arg: None")    # unexpected behaviour - ?? NO "instance bark"
 
     # ------------------------------------------------------------------
 
@@ -109,25 +139,33 @@ class AboutClassAttributes(Koan):
         def set_name(cls, name):
             cls._name = name
 
-        name = property(get_name, set_name)
+        name = property(get_name, set_name)     # @classmethods
+        
+                                                # instance methods
         name_from_instance = property(get_name_from_instance, set_name_from_instance)
 
     def test_classmethods_can_not_be_used_as_properties(self):
-        fido = self.Dog3()
-        with self.assertRaises(___): fido.name = "Fido"
-
-    def test_classes_and_instances_do_not_share_instance_attributes(self):
-        fido = self.Dog3()
-        fido.set_name_from_instance("Fido")
-        fido.set_name("Rover")
-        self.assertEqual(__, fido.get_name_from_instance())
-        self.assertEqual(__, self.Dog3.get_name())
+        fido = self.Dog3()                                      # no name passed in - no needed - init to None
+        kali = self.Dog3()
+        with self.assertRaises(TypeError): fido.name = "Fido"   # classmethod called on object - WRITE - NO
+        self.Dog3.name = "Faulty"                               # NOT using @property!
+        self.assertEqual("Faulty", self.Dog3.name)              # OK
+        self.assertEqual("Faulty", kali.name)                   # OK - return cls._name               
+                                                                # classmethod called on object - READ  - YES - TODO check
+                                                                                    #
+    def test_classes_and_instances_do_not_share_instance_attributes(self):          #
+        fido = self.Dog3()                                                          #
+        fido.set_name_from_instance("Fido")                                         #
+        fido.set_name("Rover")                                                      #
+        self.assertEqual("Fido", fido.get_name_from_instance())                     #
+        self.assertEqual("Rover", self.Dog3.get_name())                             #
+        #self.assertEqual("Rover", self.Dog3.name)             # AssertionError: 'Rover' != <property object at 0x10b0d52c8>
 
     def test_classes_and_instances_do_share_class_attributes(self):
         fido = self.Dog3()
         fido.set_name("Fido")
-        self.assertEqual(__, fido.get_name())
-        self.assertEqual(__, self.Dog3.get_name())
+        self.assertEqual("Fido", fido.get_name())
+        self.assertEqual("Fido", self.Dog3.get_name())
 
     # ------------------------------------------------------------------
 
@@ -140,15 +178,16 @@ class AboutClassAttributes(Koan):
 
         a_class_method = classmethod(a_class_method)
         a_static_method = staticmethod(a_static_method)
-
+                                                            # what happened to in Python you can only do things one way
+                                                            # the obvious way !! :/
     def test_you_can_define_class_methods_without_using_a_decorator(self):
-        self.assertEqual(__, self.Dog4.a_class_method())
+        self.assertEqual('dogs class method', self.Dog4.a_class_method())
 
     def test_you_can_define_static_methods_without_using_a_decorator(self):
-        self.assertEqual(__, self.Dog4.a_static_method())
+        self.assertEqual('dogs static method', self.Dog4.a_static_method())
 
     # ------------------------------------------------------------------
 
     def test_heres_an_easy_way_to_explicitly_call_class_methods_from_instance_methods(self):
         fido = self.Dog4()
-        self.assertEqual(__, fido.__class__.a_class_method())
+        self.assertEqual('dogs class method', fido.__class__.a_class_method())
