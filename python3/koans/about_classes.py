@@ -115,7 +115,7 @@ class AboutClasses(Koan):
         def name(self):                 # instance method - accessor - @name.getter
             return self._name
 
-        @name.setter                    # decorator.?        
+        @name.setter                    # decorator - allows write access        
         def name(self, a_name):         # instance method mutator
             self._name = a_name         # I thought there was only supposed to be one way of
                                         # doing things in python?? bla bla bla

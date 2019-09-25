@@ -118,7 +118,7 @@ class IngredientsDB:
     # load DB if not loaded
     def __init__(self):
         if IngredientsDB.__instance != None:
-            raise Exception("Access IngredientsDB via getInstance class method")
+            raise Exception("Access IngredientsDB via getInstance() class method")
         else:
             IngredientsDB.__instance = self
 

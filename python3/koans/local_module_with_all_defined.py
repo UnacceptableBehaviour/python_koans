@@ -5,7 +5,8 @@
 # EG
 # form ./local_module_with_all_defined import *
 # imports classes  Goat & _Velociraptor
-# NOTE _Velociraptor is private because of underscore
+# NOTE _Velociraptor would be private because of underscore
+#      but isn't because it's included in __all__
 
 __all__ = (
     'Goat',

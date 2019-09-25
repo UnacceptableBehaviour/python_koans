@@ -42,6 +42,12 @@ print( obj.staticMethod() )
 print("<\n\n")
 
 # whats the difference between a @classmethod & @staticmethod method?
+# https://stackoverflow.com/questions/136097/what-is-the-difference-between-staticmethod-and-classmethod
+# a static method is not associated with the class
+# no class or object reference is passed in - its the same as a function declared in the
+# module but doesn't plote the modules namespace - use for class assisiated functions
+#
+# class module passed in a ref to the class
 
 
 # https://stackoverflow.com/questions/5690888/variable-scopes-in-python-classes

@@ -34,9 +34,13 @@ class AboutMultipleInheritance(Koan):
             self._name = "Jasper"
 
         @property  # read only property: https://stackoverflow.com/questions/17330160/how-does-the-property-decorator-work
-        def name(self):
-            return self._name
-
+        def name(self):             # allows read w/o method call:
+            return self._name       # a = Pig()   a.name returns 'what ever names value is'
+                                    # instead of  a.name()
+        @name.setter         # write version of property decorator
+        def name(self, x):
+            self._name = x
+        
         def speak(self):
             return "OINK"
 
