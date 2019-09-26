@@ -199,7 +199,9 @@ class AboutClassAttributes(Koan):
     
     
     class A(object):        # A inherits object (this is implicitic anyway)
-        self._x = -1                              # referenced by self._x in methods  
+        #self._x = -1                        # NameError: name 'self' is not defined
+        
+        _x = -1                              # referenced by self._x in methods  
         '''A._x is an attribute'''           # A._x   - class variable (co-exists w/ object var across objects)
                                              # a._x   - object variable when a = A()
         @property
@@ -273,6 +275,18 @@ class AboutClassAttributes(Koan):
     print(b._x)                              # 14
     print(b.x)                               # 14
     print(A._x)                              # -1
+    b._y = 99
+    b.y =  16
+    print(b._y)                              # 99       # _y attribute added on the fly
+    print(b.y)                               # 16       # y attribute added on the fly   - no property define so values differ
+    print(dir(a))           # ['__class__', '__delattr__', . . . '__weakref__', '_x', 'x']
+    print(dir(b))           # ['__class__', '__delattr__', . . . '__weakref__', '_x', '_y', 'x', 'y']
+    #print(a._y)                             # AttributeError
+    #print(a.y)                              # AttributeError
+    print('weirdly')
+    b.__y = 127
+    print(b.__y)                             # 127       # __y attribute added on the fly
+    print(dir(b))           # ['__class__', '__delattr__', . . . '__weakref__', '_x', '_y', 'x', 'y']
     print('----- class A(object): -----E')   # ----- class A(object): -----E
 
 
