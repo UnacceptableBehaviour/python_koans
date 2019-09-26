@@ -191,3 +191,94 @@ class AboutClassAttributes(Koan):
     def test_heres_an_easy_way_to_explicitly_call_class_methods_from_instance_methods(self):
         fido = self.Dog4()
         self.assertEqual('dogs class method', fido.__class__.a_class_method())
+
+
+    # ------------------------------------------------------------------
+    # -- ADDED ---------------------------------------------------------
+    # https://stackoverflow.com/questions/7374748/whats-the-difference-between-a-python-property-and-attribute
+    
+    
+    class A(object):        # A inherits object (this is implicitic anyway)
+        self._x = -1                              # referenced by self._x in methods  
+        '''A._x is an attribute'''           # A._x   - class variable (co-exists w/ object var across objects)
+                                             # a._x   - object variable when a = A()
+        @property
+        def x(self):
+            '''
+            A.x is a property
+            This is the getter method
+            '''
+            return self._x
+    
+        @x.setter
+        def x(self, value):
+            """
+            This is the setter method
+            where I can check it's not assigned a value < 0
+            """
+            if value < 0:
+                raise ValueError("Must be >= 0")
+            self._x = value
+    
+    # >>> a = A()
+    # >>> a._x = -1
+    # >>> a.x = -1
+    # Traceback (most recent call last):
+    #   File "ex.py", line 15, in <module>
+    #     a.x = -1
+    #   File "ex.py", line 9, in x
+    #     raise ValueError("Must be >= 0")
+    # ValueError: Must be >= 0
+    a = A()
+    print('----- class A(object): -----S')   # ----- class A(object): -----S
+    print(A._x)                              # -1           class attribute - mnainained separately from each object
+    print(a._x)                              # -1           object attribute (retrieved from class attribute)
+    print(id(A._x))                          # 4395528320 <-----\  
+    print(id(a._x))                          # 4395528320 <------\---------------------------------# same
+                                                                                                   #
+    a._x = 10                                                                                      #
+    print(a._x)                              # 10           object attribute  <#  new allocation   #
+    print(id(a._x))                          # 4395528512                      #                   #
+    a.x = 5                                                                    #                   #
+    print(a._x)                              # 5            object attribute   #                   #
+    print(a.x)                               # 5            object attribute  <#-same object       #
+    print(id(A._x))                          # 4395528320 <----------------------------------------#
+    print(id(a._x))                          # 4395528512
+    print(id(a.x))                           # 4395528512   
+    print(type(a._x))                        # <class 'int'>
+    print(type(a.x))                         # <class 'int'>
+
+    print(A._x)                              # -1
+    b = A()
+    b._x = 40
+    b.x = 14
+    print(b._x)                              # 14
+    print(b.x)                               # 14
+    print(A._x)                              # -1
+    print('----- class A(object): -----E')   # ----- class A(object): -----E
+
+    # same as above w/o the id info - bit clearer
+    print('----- class A(object): -----S')   # ----- class A(object): -----S
+    print(A._x)                              # -1           class attribute - mnainained separately from each object
+    print(a._x)                              # -1           object attribute (retrieved from class attribute)
+    a._x = 10                                                                                    
+    print(a._x)                              # 10           object attribute  <#  new allocation 
+    a.x = 5                                                                    #                 
+    print(a._x)                              # 5            object attribute   #                 
+    print(a.x)                               # 5            object attribute  <#-same object     
+    print(A._x)                              # -1
+    b = A()
+    b._x = 40
+    b.x = 14
+    print(b._x)                              # 14
+    print(b.x)                               # 14
+    print(A._x)                              # -1
+    print('----- class A(object): -----E')   # ----- class A(object): -----E
+
+
+
+
+
+
+
+
