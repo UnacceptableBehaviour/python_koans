@@ -218,7 +218,8 @@ EAFP - Easier to Ask Frogiveness Than Permission
 Characterised by presence of exception blocks, try, except, else
 https://docs.python.org/3.6/glossary.html#term-eafp
 
-functools.partial
+functools.partial (used to rename a function with the signature containing key word argument that have defaults set!)
+EG power(a, e)  might be changed to a function called square with n set as default 2 
 Create a partial object with Read Only attributes
 https://docs.python.org/3.6/library/functools.html#functools.partial
 https://docs.python.org/3.6/library/functools.html#partial-objects
@@ -228,7 +229,9 @@ Keyword argument: func(keyword_arg = 6, keyword_arg2 = ‘poof the MD’)
 https://docs.python.org/3/library/
 
 
-05connoraddison@gmail.com
+## L32-
+Diference between Attributes & Properties
+https://stackoverflow.com/questions/7374748/whats-the-difference-between-a-python-property-and-attribute
 
 
 
