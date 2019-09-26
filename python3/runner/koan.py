@@ -9,14 +9,14 @@ import re
 
 __all__ = [ "__", "___", "____", "_____", "Koan" ]
 
-__ = "-=> FILL ME IN! <=-"
+__ = "-=> FILL ME IN! <=-"          # get outa here double underscore's a variable = duh!
 
-class ___(Exception):
+class ___(Exception):               # tripple underscore's a class inheriting from Exception
     pass
 
-____ = "-=> TRUE OR FALSE? <=-"
+____ = "-=> TRUE OR FALSE? <=-"     # quad underscore - hint
 
-_____ = 0
+_____ = 0                           # quit underscore is zero!
 
 
 class Koan(unittest.TestCase):

@@ -13,6 +13,7 @@ class AboutClassAttributes(Koan):
 
     def test_objects_are_objects(self):
         fido = self.Dog()                 # fido is an object of type Dog
+                                          #       package?    module(filename)      class            class
         # print(fido.__class__)           # <class 'koans.about_class_attributes.AboutClassAttributes.Dog'>
         # print(fido.__class__.__name__)  # Dog
 
@@ -36,7 +37,12 @@ class AboutClassAttributes(Koan):
         # '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__',
         # '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__',
         # '__subclasshook__', '__weakref__']
+        print('fido.__dir__')
+        print(fido.__dir__())
         self.assertEqual(26, len(dir(fido)))
+        # ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__']        
+        self.assertEqual(26, len(fido.__dir__())) # 26 but not the same 26! TODO
+        # ['__module__', '__dict__', '__weakref__', '__doc__', '__repr__', '__hash__', '__str__', '__getattribute__', '__setattr__', '__delattr__', '__lt__', '__le__', '__eq__', '__ne__', '__gt__', '__ge__', '__init__', '__new__', '__reduce_ex__', '__reduce__', '__subclasshook__', '__init_subclass__', '__format__', '__sizeof__', '__dir__', '__class__']
 
     def test_classes_have_methods(self):
         self.assertEqual(26, len(dir(self.Dog)))
@@ -51,7 +57,7 @@ class AboutClassAttributes(Koan):
 
     def test_defining_attributes_on_individual_objects(self):
         fido = self.Dog()
-        fido.legs = 4
+        fido.legs = 4                                   # creates an attribute legs in the fido OBJECT ONLY
         #self.assertEqual(__, fido.__weakref__) # None
         self.assertEqual('koans.about_class_attributes', fido.__module__)
         self.assertEqual(4, fido.__dict__['legs'])
@@ -83,6 +89,8 @@ class AboutClassAttributes(Koan):
         fido.wag = wag                                         # singleton function 
                                                                # 
         with self.assertRaises(AttributeError): rover.wag()    # so rover wont do fidos wag!!
+        # type(fido.wag) =>  <class 'function'>
+        self.assertEqual('function',type(fido.wag).__name__)
 
     # ------------------------------------------------------------------
 
@@ -122,6 +130,8 @@ class AboutClassAttributes(Koan):
     # ------------------------------------------------------------------
 
     class Dog3:
+        #_name = None                   # serves same function as init: self._name = None
+                                        # issues with super()? TODO
         def __init__(self):
             self._name = None
 
@@ -139,19 +149,22 @@ class AboutClassAttributes(Koan):
         def set_name(cls, name):
             cls._name = name
 
-        name = property(get_name, set_name)     # @classmethods
+        name = property(get_name, set_name)     # @classmethods         - creating a class property
         
-                                                # instance methods
+                                                # instance methods      - creating a instance property
         name_from_instance = property(get_name_from_instance, set_name_from_instance)
 
     def test_classmethods_can_not_be_used_as_properties(self):
         fido = self.Dog3()                                      # no name passed in - no needed - init to None
         kali = self.Dog3()
         with self.assertRaises(TypeError): fido.name = "Fido"   # classmethod called on object - WRITE - NO
-        self.Dog3.name = "Faulty"                               # NOT using @property!
-        self.assertEqual("Faulty", self.Dog3.name)              # OK
-        self.assertEqual("Faulty", kali.name)                   # OK - return cls._name               
-                                                                # classmethod called on object - READ  - YES - TODO check
+        self.Dog3.breed = "Retriever"                           # This creates an attribute 'breed' in the Dog3 class object
+        self.assertEqual("Retriever", self.Dog3.breed)          # this retrieves it
+        self.assertEqual("Retriever", kali.breed)  # Looks for attribute 'breed' in kali object, when not found goes to class level attribute
+        kali.breed = 'Poodle'                                   # creates object level attribute, assigns 'Poodle'
+        self.assertEqual("Retriever", self.Dog3.breed)          # class attribute remains 'Retriever'
+        self.assertEqual('Poodle', kali.breed)                  # object level attribute remains 'Poodle' 
+                                                                
                                                                                     #
     def test_classes_and_instances_do_not_share_instance_attributes(self):          #
         fido = self.Dog3()                                                          #
@@ -283,12 +296,12 @@ class AboutClassAttributes(Koan):
     print(dir(b))           # ['__class__', '__delattr__', . . . '__weakref__', '_x', '_y', 'x', 'y']
     #print(a._y)                             # AttributeError
     #print(a.y)                              # AttributeError
-    print('weirdly')
-    b.__y = 127
+    print('- - - weirdly')
+    b.__y = 127                                          # double underscore private
     print(b.__y)                             # 127       # __y attribute added on the fly
-    print(dir(b))           # ['__class__', '__delattr__', . . . '__weakref__', '_x', '_y', 'x', 'y']
+    print(dir(b))           # ['_AboutClassAttributes__y', '__class__', . . . '__weakref__', '_x', '_y', 'x', 'y']
+                            #     ^ A class in mangled name TODO
     print('----- class A(object): -----E')   # ----- class A(object): -----E
-
 
 
 
