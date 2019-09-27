@@ -20,7 +20,7 @@ class AboutAttributeAccess(Koan):
     def test_calling_getattribute_causes_an_attribute_error(self):
         typical = self.TypicalObject()
 
-        with self.assertRaises(___): typical.__getattribute__('foobar')
+        with self.assertRaises(AttributeError): typical.__getattribute__('foobar')
 
         # THINK ABOUT IT:
         #
@@ -36,50 +36,72 @@ class AboutAttributeAccess(Koan):
     def test_all_attribute_reads_are_caught(self):
         catcher = self.CatchAllAttributeReads()
 
-        self.assertRegex(catcher.foobar, __)
+        self.assertRegex(catcher.foobar, "Someone called 'foobar' and it could not be found")
 
     def test_intercepting_return_values_can_disrupt_the_call_chain(self):
         catcher = self.CatchAllAttributeReads()
 
-        self.assertRegex(catcher.foobaz, __) # This is fine
+        self.assertRegex(catcher.foobaz, "'foobaz' and it could not be found") # This is fine
 
         try:
-            catcher.foobaz(1)
-        except TypeError as ex:
+            catcher.foobaz(1)               # retrieve attribute (method) w parameter
+        except TypeError as ex:             # include trace 
             err_msg = ex.args[0]
+            print(ex)
+            print(len(ex.args))
+            print(self.CatchAllAttributeReads.mro())
+            
 
-        self.assertRegex(err_msg, __)
+        self.assertRegex(err_msg, "'str' object is not callable")
 
         # foobaz returns a string. What happens to the '(1)' part?
         # Try entering this into a python console to reproduce the issue:
         #
         #     "foobaz"(1)
+        #        ^     ^
+        #       str    call with arg=1
         #
+        # >>> "foobaz"(1)
+        # TypeError: 'str' object is not callable
+        # "Someone called '" + 'foobaz'(1) + "' and it could not be found"
 
     def test_changes_to_the_getattribute_implementation_affects_getattr_function(self):
         catcher = self.CatchAllAttributeReads()
 
-        self.assertRegex(getattr(catcher, 'any_attribute'), __)
+        self.assertRegex(getattr(catcher, 'any_attribute'), "Someone called 'any_attribute' and it could not be found")
+        # __im_usually_a_private_hook__  < double underscore
+        # usually reseved for hooks - and implementation - also private
+        # built in getattr() will use the hook and therefore its behaviour is changed
 
     # ------------------------------------------------------------------
 
     class WellBehavedFooCatcher:
         def __getattribute__(self, attr_name):
+            # 'foo_bar'[:3]
+            # 'foo'
+            # >>> 'foo_bar'[:6]
+            # 'foo_ba'
+            # >>> 'foo_bar'[3:6]
+            # '_ba'
             if attr_name[:3] == "foo":
                 return "Foo to you too"
             else:
                 return super().__getattribute__(attr_name)
+                # stop infinite recursion?
+                # https://docs.python.org/3/reference/datamodel.html#object.__getattribute__
+                
 
     def test_foo_attributes_are_caught(self):
         catcher = self.WellBehavedFooCatcher()
 
-        self.assertEqual(__, catcher.foo_bar)
-        self.assertEqual(__, catcher.foo_baz)
+        self.assertEqual('Foo to you too', catcher.foo_bar)
+        with self.assertRaises(AttributeError): catcher.doo_baz
+        self.assertEqual('Foo to you too', catcher.foo_baz)
 
     def test_non_foo_messages_are_treated_normally(self):
         catcher = self.WellBehavedFooCatcher()
 
-        with self.assertRaises(___): catcher.normal_undefined_attribute
+        with self.assertRaises(AttributeError): catcher.normal_undefined_attribute
 
     # ------------------------------------------------------------------
 
