@@ -7,6 +7,7 @@
 # and lots of head scratching and tests!
 #
 
+import re
 import sys
 import json
 from pprint import pprint 
@@ -40,9 +41,28 @@ from pprint import pprint
 
 
 class Nutrients:
+    match_lookup = {                    # translate from human readable text to dict
+        'energy':'n_En',
+        'fat':'n_Fa',
+        'saturates':'n_Fs',             # 'fat-saturates':'n_Fs',
+        'mono-unsaturates':'n_Fm',      # 'fat-mono-unsaturates':'n_Fm',
+        'poly-unsaturates':'n_Fp',      # 'fat-poly-unsaturates':'n_Fp',
+        'omega_3_oil':'n_Fo3',          # 'fat-omega_3':'n_Fo3',
+        'carbohydrates':'n_Ca',
+        'sugars':'n_Su',
+        'fibre':'n_Fb',
+        'starch':'n_St',
+        'protein':'n_Pr',
+        'salt':'n_Sa',
+        'alcohol':'n_Al'    
+    }
+    
+    log_nutridata_key_errors = []
+    
     def __init__(self, ingredient='name_of_ingredient', nutridict={}): # nutridict={}):
         self.nutridict = {                  # self.nutridict - instance var
             'name': ingredient,
+            'x_ref': None,
             'servings': 0,
             'serving_size': 0.0,
             'yield': '0g',
@@ -62,29 +82,110 @@ class Nutrients:
             'n_Sa':0.0,   # salt
             'n_Al':0.0    # alcohol
         }.update(nutridict)  #(nutridict - passed in)
-        
-        #self.ri_id = Ingredient.ingredientLookUp(ingredient, self.nutridict) 
+       
 
-class Error(Exception):
+    @property
+    def nutridict(self):
+        return self.nutridict
+ 
+    @nutridict.setter                           #
+    def nutridict(self, **kwargs):              # https://pythontips.com/2013/08/04/args-and-kwargs-in-python-explained/
+        self.nutridict.update(kwargs)
+
+    
+    @classmethod
+    def process_text_to_nutrients_dict(cls, text_data, nutri_dict):
+        if type(nutri_dict).__name__ != 'dict':
+            nutri_dict = {}
+
+        # scan for nutrients
+        print("SCANNING. . . ")
+        nut2ObjLUT = Nutrients.match_lookup
+
+
+        # match groups
+        # 1 ingredient name
+        # 2 servings / source < assumes nutirnt data is per 100g
+        # 3 nutrients
+        # 4 yield
+        for m in re.finditer(r'^-+ for the nutrition information(.*?)\((.*?)\)$(.*?)Total \((.*?)\)', text_data, re.MULTILINE | re.DOTALL ):
+            #ingredient = Nutrients()
+            nutridict_for_pass = {}
+            name = m.group(1).strip()
+            
+            if (name == ''): continue             # skip blank templates
+            
+            print(f"===---type(ingredient) [{name}]")
+            # print(type(ingredient))
+            # print(nutridict_for_pass['name'])
+                        
+            nutridict_for_pass['name'] = name
+            
+            if ('ml' in m.group(4)):
+                nutridict_for_pass['yield'] = float(m.group(4).replace('ml', ''))
+                nutridict_for_pass['units'] = 'ml'
+            else:
+                nutridict_for_pass['yield'] = float(m.group(4).replace('g', ''))
+            
+            if (m.group(2) == 'per 100g'):                      # 100g per serving
+                nutridict_for_pass['serving'] = 100.0
+            elif ('ndb_no=' in m.group(2) ):                    # cross reference in place of per 100g
+                nutridict_for_pass['serving'] = 100.0
+                nutridict_for_pass['x_ref'] = m.group(2)
+            elif (m.group(2) == m.group(4)):                    # yield and serving same
+                nutridict_for_pass['serving'] = float(m.group(2).replace('g', ''))
+            
+            print(f"\n\n** {name} - {m.group(2)} \n {m.group(3)} \n {m.group(4)} \n--")
+            
+            lines = [ line.strip() for line in m.group(3).split("\n")] # remove leading/training space
+            
+            lines = list( filter(None, lines) )                 # remove blanks & empty elements
+            
+            for line in lines:
+                print(f"L:{len(line)} - [{line}]");
+                pair = [ item.strip() for item in line.split() ]    # split line by white space, strip excess space off                
+                pprint(pair)
+                try:
+                    nutridict_for_pass[ nut2ObjLUT[pair[0]] ] = float(pair[1])
+                except KeyError:
+                    Nutrients.log_nutridata_key_errors.append(pair[0])
+                except ValueError:
+                    if (',' in pair[1]): pair[1] = pair[1].replace(',','.')
+                    if (pair[1] == '.'): pair[1] = '0.0'
+                    if ('g' in pair[1]): pair[1] = pair[1].replace('g','')
+                    nutridict_for_pass[ nut2ObjLUT[pair[0]] ] = float(pair[1])
+                    
+            # TODO 
+            #insert = Nutrients(name, nutridict_for_pass)
+            #nutri_dict[name] = insert.nutridict
+            nutri_dict[name] = nutridict_for_pass
+
+        print("SCANNING. . . complete")        
+        
+        return nutri_dict
+        
+
+class NutriDictError(Exception):
     '''Move this and other error classes to separate file: exceptions.py'''
     pass
 
-class AccessError(Error):
+class AccessError(NutriDictError):
     '''Raised when interface used incorrectly'''
     pass
 
-class DemoMultipleCatch(Error):
+class DemoMultipleCatch(NutriDictError):
     '''How to catch multiple exception types'''
     pass
 
-class ResourceLocked(Error):
+class ResourceLocked(NutriDictError):
     '''No other threads yet so should not happen!'''
     pass
     
 
 # Singleton interface for the NutrientsDB
 class NutrientsDB:
-    __nutrients_db_file = 'ingredient_db.json'
+    #__nutrients_db_file = 'ingredient_db.json'
+    __nutrients_db_file = '/Users/simon/Desktop/supperclub/foodlab/_MENUS/_courses_components/z_product_nutrition_info.txt'
     __nutrients_db = {}
     __seek_misses = []
     __nutrients_loaded = False
@@ -140,6 +241,7 @@ class NutrientsDB:
     def __init__(self):
         if NutrientsDB.__instance != None:
             raise AccessError("Access NutrientsDB via getInstance() class method")
+            return
         else:
             NutrientsDB.__instance = self
 
@@ -147,8 +249,10 @@ class NutrientsDB:
             try:
                 with open(NutrientsDB.__nutrients_db_file, 'r') as f:
                     json_db = f.read()
-                    NutrientsDB.__nutrients_db = json.loads(json_db)                    
-                    NutrientsDB.__nutrients_loaded = True                    
+                    #NutrientsDB.__nutrients_db = json.loads(json_db)
+                    Nutrients.process_text_to_nutrients_dict(json_db, NutrientsDB.__nutrients_db)
+                    NutrientsDB.__nutrients_loaded = True
+                    print(f"SUCCESS: Loaded {NutrientsDB.__len__()} ingredients.")
             
             except NotImplementedError as e:
                 print("WARNING Exception raised: getInstance FAILED to load DB")
@@ -158,6 +262,10 @@ class NutrientsDB:
     def __len__(cls):
         return len(NutrientsDB.__nutrients_db.keys()) 
 
+    @classmethod
+    def list_seek_misses(cls):
+        pprint(NutrientsDB.__seek_misses)
+        return NutrientsDB.__seek_misses
 
 
 
@@ -196,4 +304,14 @@ print(id(ingredient_db2))
 # print(id(ingredient_db3))
 # 
 pprint( ingredient_db.get('flour') )
-
+NutrientsDB.list_seek_misses()
+pprint( ingredient_db.get('coffee') )
+pprint( ingredient_db.get('pork chop') )
+pprint( ingredient_db.get('spinach tortilla') )
+# TODO - understand this
+# class AttrDict(dict):
+#     def __init__(self, *args, **kwargs):
+#         super(AttrDict, self).__init__(*args, **kwargs)
+#         self.__dict__ = self
+# from
+# https://stackoverflow.com/questions/4984647/accessing-dict-keys-like-an-attribute
