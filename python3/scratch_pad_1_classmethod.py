@@ -12,32 +12,18 @@ import sys
 import json
 from pprint import pprint 
 
-    
-# 
-# def return_nutrinfo_dictionary(ingredient='name'):
-#     return {
-#             'name': ingredient,
-#             'servings': 0,
-#             'serving_size': 0,
-#             'yield': '0g',
-#             'units': 'g',
-#             'density': 1,            
-#             'n_En':0, 'n_Fa':0, 'n_Fs':0, 'n_Fm':0, 'n_Fp':0, 'n_Fo3':0, 'n_Ca':0,
-#             'n_Su':0, 'n_Fb':0, 'n_St':0, 'n_Pr':0, 'n_Sa':0, 'n_Al':0
-#             }
-#             
-# print("Nutridict")
-# # create content for json file
-# pprint({ 'sugar':return_nutrinfo_dictionary('sugar') })
-# pprint({ 'eggs':return_nutrinfo_dictionary('eggs') })
-# pprint({ 'flour':return_nutrinfo_dictionary('flour') })
-# pprint({ 'milk':return_nutrinfo_dictionary('milk') })
-# pprint({ 'pancakes':return_nutrinfo_dictionary('pancakes') })
-# print("<\n\n")
+#config_file = './scratch/config_files.json'
+config_file = '../../mysql_python/scratch/config_files.json'
+iface_files = {}
+try:
+    with open(config_file, 'r') as f:
+        json_config = f.read()
+        iface_files = json.loads(json_config)
+        print(f"Config files LOADED ({iface_files.__len__()})")
             
-# {'serving_size': 100.0, 'units':'g', 'n_En':0.0}
-#nutrient = Nutrients('sugar', {'serving_size': 100.0, 'units':'g', 'n_En':400.0})
-#pprint(nutrient)
+except NotImplementedError as e:
+    print("WARNING ERROR loading config file")
+    print(f"\n***\n{e} \n<")                        
 
 
 class Nutrients:
@@ -60,7 +46,7 @@ class Nutrients:
     log_nutridata_key_errors = []
     
     def __init__(self, ingredient='name_of_ingredient', nutridict={}): # nutridict={}):
-        self.nutridict = {                  # self.nutridict - instance var
+        self._nutridict = {                  # self.nutridict - instance var
             'name': ingredient,
             'x_ref': None,
             'servings': 0,
@@ -85,12 +71,12 @@ class Nutrients:
        
 
     @property
-    def nutridict(self):
-        return self.nutridict
+    def nutridict(self):        
+        return self._nutridict
  
     @nutridict.setter                           #
     def nutridict(self, **kwargs):              # https://pythontips.com/2013/08/04/args-and-kwargs-in-python-explained/
-        self.nutridict.update(kwargs)
+        self._nutridict.update(kwargs)
 
     
     @classmethod
@@ -156,9 +142,15 @@ class Nutrients:
                     nutridict_for_pass[ nut2ObjLUT[pair[0]] ] = float(pair[1])
                     
             # TODO 
-            #insert = Nutrients(name, nutridict_for_pass)
-            #nutri_dict[name] = insert.nutridict
-            nutri_dict[name] = nutridict_for_pass
+            # insert = Nutrients(name, nutridict_for_pass)
+            # nutri_dict[name] = insert.nutridict
+            # print('- - - - - * - - - - - * - - - - - * - - - - - * - - - - - * - - - - - * - - - - - * ')
+            # pprint(insert)
+            # pprint(insert.nutridict)
+            #-
+            #nutri_dict[name] = Nutrients(name, nutridict_for_pass).nutridict # issue w/ @property / mutator
+
+            nutri_dict[name] = nutridict_for_pass  # WORKS
 
         print("SCANNING. . . complete")        
         
@@ -185,7 +177,7 @@ class ResourceLocked(NutriDictError):
 # Singleton interface for the NutrientsDB
 class NutrientsDB:
     #__nutrients_db_file = 'ingredient_db.json'
-    __nutrients_db_file = '/Users/simon/Desktop/supperclub/foodlab/_MENUS/_courses_components/z_product_nutrition_info.txt'
+    __nutrients_db_file = iface_files['nutrients_txt_db']
     __nutrients_db = {}
     __seek_misses = []
     __nutrients_loaded = False
@@ -248,15 +240,19 @@ class NutrientsDB:
         if NutrientsDB.__nutrients_loaded == False:
             try:
                 with open(NutrientsDB.__nutrients_db_file, 'r') as f:
-                    json_db = f.read()
-                    #NutrientsDB.__nutrients_db = json.loads(json_db)
-                    Nutrients.process_text_to_nutrients_dict(json_db, NutrientsDB.__nutrients_db)
+                    nutrition_items_text = f.read()
+                    Nutrients.process_text_to_nutrients_dict(nutrition_items_text, NutrientsDB.__nutrients_db)
                     NutrientsDB.__nutrients_loaded = True
                     print(f"SUCCESS: Loaded {NutrientsDB.__len__()} ingredients.")
             
             except NotImplementedError as e:
                 print("WARNING Exception raised: getInstance FAILED to load DB")
                 print(f"\n***\n{e} \n<")                        
+    
+    @classmethod
+    def loadNutrientsFromTextFile(cls, nutri_file, nutri_dict):
+        pass
+    
     
     @classmethod
     def __len__(cls):
@@ -304,10 +300,11 @@ print(id(ingredient_db2))
 # print(id(ingredient_db3))
 # 
 pprint( ingredient_db.get('flour') )
-NutrientsDB.list_seek_misses()
 pprint( ingredient_db.get('coffee') )
 pprint( ingredient_db.get('pork chop') )
 pprint( ingredient_db.get('spinach tortilla') )
+print(f"Seek Misses:\n{NutrientsDB.list_seek_misses()}")
+
 # TODO - understand this
 # class AttrDict(dict):
 #     def __init__(self, *args, **kwargs):
