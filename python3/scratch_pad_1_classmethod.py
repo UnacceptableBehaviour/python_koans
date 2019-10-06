@@ -114,12 +114,13 @@ class Nutrients:
                 nutridict_for_pass['yield'] = float(m.group(4).replace('g', ''))
             
             if (m.group(2) == 'per 100g'):                      # 100g per serving
-                nutridict_for_pass['serving'] = 100.0
+                nutridict_for_pass['serving_size'] = 100.0
             elif ('ndb_no=' in m.group(2) ):                    # cross reference in place of per 100g
-                nutridict_for_pass['serving'] = 100.0
+                nutridict_for_pass['serving_size'] = 100.0
                 nutridict_for_pass['x_ref'] = m.group(2)
-            elif (m.group(2) == m.group(4)):                    # yield and serving same
-                nutridict_for_pass['serving'] = float(m.group(2).replace('g', ''))
+            elif (m.group(2).replace('per ', '') == m.group(4)):                    # yield and serving same
+                nutridict_for_pass['serving_size'] = nutridict_for_pass['yield']
+                nutridict_for_pass['servings'] = 1.0
             
             print(f"\n\n** {name} - {m.group(2)} \n {m.group(3)} \n {m.group(4)} \n--")
             
@@ -238,21 +239,31 @@ class NutrientsDB:
             NutrientsDB.__instance = self
 
         if NutrientsDB.__nutrients_loaded == False:
-            try:
-                with open(NutrientsDB.__nutrients_db_file, 'r') as f:
-                    nutrition_items_text = f.read()
-                    Nutrients.process_text_to_nutrients_dict(nutrition_items_text, NutrientsDB.__nutrients_db)
-                    NutrientsDB.__nutrients_loaded = True
-                    print(f"SUCCESS: Loaded {NutrientsDB.__len__()} ingredients.")
-            
-            except NotImplementedError as e:
-                print("WARNING Exception raised: getInstance FAILED to load DB")
-                print(f"\n***\n{e} \n<")                        
+            NutrientsDB.loadNutrientsFromTextFile(NutrientsDB.__nutrients_db_file, NutrientsDB.__nutrients_db)
+            if (NutrientsDB.__len__() > 0):
+                NutrientsDB.__nutrients_loaded = True
+                print(f"SUCCESS: Loaded {NutrientsDB.__len__()} ingredients.")
+                      
     
-    @classmethod
+    @classmethod                    
     def loadNutrientsFromTextFile(cls, nutri_file, nutri_dict):
-        pass
-    
+        '''Load nutrient information fro text file and load it into Dict'''
+        try:
+            with open(nutri_file, 'r') as f:
+                nutrition_items_text = f.read()
+                Nutrients.process_text_to_nutrients_dict(nutrition_items_text, nutri_dict)
+                print(f"nutri_file: {nutri_file}")
+                print("nutri_dict:")
+                pprint(nutri_dict)
+                print("> - - - - - <")
+            
+        except NotImplementedError as e:
+            print("WARNING Exception raised: loadNutrientsFromTextFile")
+            print(f"nutri_file: {nutri_file}")
+            print("nutri_dict:")
+            pprint(nutri_dict)
+            print(f"\n***\n{e} \n<")          
+
     
     @classmethod
     def __len__(cls):
@@ -304,6 +315,15 @@ pprint( ingredient_db.get('coffee') )
 pprint( ingredient_db.get('pork chop') )
 pprint( ingredient_db.get('spinach tortilla') )
 print(f"Seek Misses:\n{NutrientsDB.list_seek_misses()}")
+
+t_dict = {}
+i_db = NutrientsDB.getInstance()
+i_db.loadNutrientsFromTextFile(iface_files['dtk_nutrients_txt'], t_dict)
+print("t_dict")
+pprint(t_dict)
+
+
+
 
 # TODO - understand this
 # class AttrDict(dict):
