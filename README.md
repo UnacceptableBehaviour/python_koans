@@ -250,7 +250,8 @@ http://code.activestate.com/recipes/496741-object-proxying/
 Proxy Pattern Python  
 https://refactoring.guru/design-patterns/proxy/python/example  
 
-
+Inspect Module
+https://docs.python.org/3/library/inspect.html
 
 
 

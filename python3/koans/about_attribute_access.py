@@ -42,11 +42,12 @@ class AboutAttributeAccess(Koan):
         catcher = self.CatchAllAttributeReads()
 
         self.assertRegex(catcher.foobaz, "'foobaz' and it could not be found") # This is fine
-
+                        #   ^ = getattr(catcher, 'foobaz')
         try:
             catcher.foobaz(1)               # retrieve attribute (method) w parameter
         except TypeError as ex:             # include trace 
             err_msg = ex.args[0]
+            print("catcher.foobaz(1)")      # find me in shell
             print(ex)
             print(len(ex.args))
             print(self.CatchAllAttributeReads.mro())
@@ -77,7 +78,7 @@ class AboutAttributeAccess(Koan):
 
     class WellBehavedFooCatcher:
         def __getattribute__(self, attr_name):
-            # 'foo_bar'[:3]
+            # >>> 'foo_bar'[:3]
             # 'foo'
             # >>> 'foo_bar'[:6]
             # 'foo_ba'
@@ -87,7 +88,7 @@ class AboutAttributeAccess(Koan):
                 return "Foo to you too"
             else:
                 return super().__getattribute__(attr_name)
-                # See is base class has attribute
+                # See if base class has attribute
                 # stop infinite recursion?
                 # https://docs.python.org/3/reference/datamodel.html#object.__getattribute__
                 # ? - see class RecursiveCatcher: 2 down
@@ -106,7 +107,7 @@ class AboutAttributeAccess(Koan):
 
     # ------------------------------------------------------------------
 
-    global stack_depth                          # __main__.global
+    global stack_depth                  # __main__.global
     #print(type(stack_depth))           # NameError: name 'stack_depth' is not defined
     
     stack_depth = 0
