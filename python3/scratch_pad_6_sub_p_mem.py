@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 
 # from: https://stackoverflow.com/questions/23937189/how-do-i-use-subprocesses-to-force-python-to-release-memory/24126616#24126616
-# concverted to 3.7
-# To run this, save it to a file that looks like a valid Python module, e.g.
-# "foo.py" - multiprocessing requires being able to import the main module.
-# Then run it with "python foo.py".
+# converted to 3.7
 
 import multiprocessing, random, sys, os, time
 from pprint import pprint
@@ -93,3 +90,8 @@ if __name__ == '__main__':
 # 3298  Python       98.9  00:07.31 1/1   0    8     279M+  0B     0B   3296 3296 running  *0[1]          0.00000 0.00000    501  81581+   707+   58        29        1320+
 # 3297  Python       0.0   00:00.01 4     0    11    4276K  0B     0B   3296 3296 sleeping *0[1]          0.00000 0.00000    501  1797     754    10        5         337+
 # 3296  Python       0.0   00:00.08 1     0    13    7252K  0B     0B   3296 1723 sleeping *0[1]          0.00000 0.00000    501  3999     1180   116       54        1572
+
+
+# TODO - implement process & thread comparison
+# https://www.youtube.com/watch?v=ecKWiaHCEKs&feature=youtu.be
+
