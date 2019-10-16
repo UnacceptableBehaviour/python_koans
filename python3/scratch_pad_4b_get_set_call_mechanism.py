@@ -170,12 +170,12 @@ print(o5.method)            # <function O3.__init__.<locals>.<lambda> at 0x104ba
                                 # O5__getattribute__ S
                                     # <__main__.O5 object at 0x10a2a2410>
                                     # <method-wrapper '__getattribute__' of O5 object at 0x10a2a2410>
-                                    # __dict__                  << 1st
+                                    # __dict__                  << 1st - - - - - < <
                                 # O5__getattribute__ E
                                 # O5__getattribute__ S
                                     # <__main__.O5 object at 0x10a2a2410>
                                     # <method-wrapper '__getattribute__' of O5 object at 0x10a2a2410>
-                                    # method                    << using __dict__['method'] ?
+                                    # method                    << using __dict__['method'] ? - - - - - < <
                                 # O5__getattribute__ E
                                 # <function O3.__init__.<locals>.<lambda> at 0x10a2a4c20>
 print("-\n")                    # -
