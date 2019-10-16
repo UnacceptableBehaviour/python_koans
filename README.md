@@ -214,7 +214,7 @@ LBYL - Look Before You Leap
 Characterised by bounds checking, key checks etc, think C. Can lead to race conditions w/o resource locks
 https://docs.python.org/3.6/glossary.html#term-lbyl
 
-EAFP - Easier to Ask Frogiveness Than Permission
+EAFP - Easier to Ask Forgiveness Than Permission
 Characterised by presence of exception blocks, try, except, else
 https://docs.python.org/3.6/glossary.html#term-eafp
 
@@ -229,9 +229,27 @@ Keyword argument: func(keyword_arg = 6, keyword_arg2 = ‘poof the MD’)
 https://docs.python.org/3/library/
 
 
-## L32-
+## L32-35
 Diference between Attributes & Properties
 https://stackoverflow.com/questions/7374748/whats-the-difference-between-a-python-property-and-attribute
+
+Threading vs Multiprocess
+https://youtu.be/ecKWiaHCEKs (6m) Consice
+
+Threading (from 40m)
+https://www.youtube.com/watch?v=EKC_jcFH98o
+
+
+## L36 - Proxy classes
+Proxy Pattern  - Intermediary Interface 
+https://refactoring.guru/design-patterns/proxy  
+
+Object Proxying Recipe - Active State
+http://code.activestate.com/recipes/496741-object-proxying/
+
+Proxy Pattern Python  
+https://refactoring.guru/design-patterns/proxy/python/example  
+
 
 
 
