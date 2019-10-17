@@ -4,17 +4,36 @@
 # Project: Create a Proxy Class
 #
 # In this assignment, create a proxy class (one is started for you
-# below).  You should be able to initialize the proxy object with any
-# object.  Any attributes called on the proxy object should be forwarded
-# to the target object.  As each attribute call is sent, the proxy should
+# below).
+#
+# 1.
+# You should be able to initialize the proxy object with any object.
+#
+# 2.
+# Any attributes called on the proxy object should be forwarded
+# to the target object.
+#
+# 3.
+# As each attribute call is sent, the proxy should
 # record the name of the attribute sent.
 #
-# The proxy class is started for you.  You will need to add a method
-# missing handler and any other supporting methods.  The specification
-# of the Proxy class is given in the AboutProxyObjectProject koan.
+# 4.
+# You will need to add a method missing handler and any other supporting
+# methods.
+#
+# The specification of the Proxy class is given in the AboutProxyObjectProject koan.
 
 # Note: This is a bit trickier than its Ruby Koans counterpart, but you
 # can do it!
+
+# revise L34 about_attribute_access.py
+#
+# Proxy Pattern  - Intermediary Interface 
+# https://refactoring.guru/design-patterns/proxy  
+#
+# Object Proxying Recipe - Active State
+# http://code.activestate.com/recipes/496741-object-proxying/
+
 
 from runner.koan import *
 

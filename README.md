@@ -118,7 +118,7 @@ https://jsonlint.com/
 #### Aside - JSON syntax
 http://www.json.org/
 
-### Documenting the cose with docstrings
+### Documenting the code with docstrings
 https://www.geeksforgeeks.org/python-docstrings/
 
 ## L10-13
@@ -176,6 +176,7 @@ https://docs.python.org/3.7/howto/descriptor.html -(see properties)
 ### = =  Python ANTI-PATTERNS
 https://docs.quantifiedcode.com/python-anti-patterns/correctness/exit_must_accept_three_arguments.html \
 https://docs.quantifiedcode.com/python-anti-patterns/index.html \
+TODO
 
 ### Python Context Manager Protocol
 Intro (and Exercise)\
@@ -203,6 +204,9 @@ Overriding __get__ __set__ __delete__
 ### Decorators
 Decorators, defining function insided functions . . . Closure Pattern
 https://www.datacamp.com/community/tutorials/decorators-python
+
+Decorators (part of docs for Proxy Object module wrapt)
+https://github.com/GrahamDumpleton/wrapt/blob/master/blog/01-how-you-implemented-your-python-decorator-is-wrong.md
 
 Decorators python 2.7
 https://www.thecodeship.com/patterns/guide-to-python-function-decorators/ \
@@ -253,7 +257,10 @@ https://refactoring.guru/design-patterns/proxy/python/example
 Inspect Module
 https://docs.python.org/3/library/inspect.html
 
-
+Proxy Object Module - wrapt (w/ C extension and pure python fallback)
+https://pypi.org/project/wrapt/  -  pip install wrapt
+https://wrapt.readthedocs.io/en/latest/
+https://github.com/GrahamDumpleton/wrapt/blob/master/blog/01-how-you-implemented-your-python-decorator-is-wrong.md
 
 
 ### Python debugger

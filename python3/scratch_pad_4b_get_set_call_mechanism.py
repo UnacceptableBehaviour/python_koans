@@ -17,9 +17,94 @@ from pprint import pprint
     # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # see about_attribute_access.py ln:166
-
-# TODO instrument
+# 
+# This example from
 # https://stackoverflow.com/questions/14787334/confused-with-getattribute-and-setattribute-in-python
+# is instrumented below.
+# 
+# 
+# class O1(object):
+#     def __getattr__(self, name):
+#         return "__getattr__ has the lowest priority to find {}".format(name)
+# 
+# class O2(O1):
+#     var = "Class variables and non-data descriptors are low priority"
+#     def method(self): # functions are non-data descriptors
+#         return self.var
+# 
+# class O3(O2):
+#     def __init__(self):
+#         self.var = "instance variables have medium priority"
+#         self.method = lambda: self.var # doesn't recieve self as arg
+# 
+# class O4(O3):
+#     @property # this decorator makes this instancevar into a data descriptor
+#     def var(self):
+#         return "Data descriptors (such as properties) are high priority"
+# 
+#     @var.setter # I'll let O3's constructor set a value in __dict__
+#     def var(self, value):
+#         self.__dict__["var"]  = value # but I know it will be ignored
+# 
+# class O5(O4):
+#     def __getattribute__(self, name):
+#         if name in ("magic", "method", "__dict__"): # for a few names
+#             return super(O5, self).__getattribute__(name) # use normal access
+# 
+#         return "__getattribute__ has the highest priority for {}".format(name)
+# 
+# 
+# And, a demonstration of the classes in action:
+# 
+# O1 (__getattr__):
+# 
+# >>> o1 = O1()
+# >>> o1.var
+# '__getattr__ has the lowest priority to find var'
+# O2 (class variables and non-data descriptors):
+# 
+# >>> o2 = O2()
+# >>> o2.var
+# Class variables and non-data descriptors are low priority
+# >>> o2.method
+# <bound method O2.method of <__main__.O2 object at 0x000000000338CD30>>
+# >>> o2.method()
+# 'Class variables and non-data descriptors are low priority'
+# O3 (instance variables, including a locally overridden method):
+# 
+# >>> o3 = O3()
+# >>> o3.method
+# <function O3.__init__.<locals>.<lambda> at 0x00000000034AAEA0>
+# >>> o3.method()
+# 'instance variables have medium priority'
+# >>> o3.var
+# 'instance variables have medium priority'
+# O4 (data descriptors, using the property decorator):
+# 
+# >>> o4 = O4()
+# >>> o4.method()
+# 'Data descriptors (such as properties) are high priority'
+# >>> o4.var
+# 'Data descriptors (such as properties) are high priority'
+# >>> o4.__dict__["var"]
+# 'instance variables have medium priority'
+# O5 (__getattribute__):
+# 
+# >>> o5 = O5()
+# >>> o5.method
+# <function O3.__init__.<locals>.<lambda> at 0x0000000003428EA0>
+# >>> o5.method()
+# '__getattribute__ has the highest priority for var'
+# >>> o5.__dict__["var"]
+# 'instance variables have medium priority'
+# >>> o5.magic
+# '__getattr__ has the lowest priority to find magic'
+# 
+
+# FROM
+# https://stackoverflow.com/questions/14787334/confused-with-getattribute-and-setattribute-in-python
+# INSTRUMENTED . . .
+
 
 
 class OO1(object):
@@ -48,7 +133,6 @@ class O2(O1):
         return self.var
     
     
-# TODO egs in link    
 o1 = O1()
 print(o1.var)               # '__getattr__ has the lowest priority to find var'
 print(getattr(o1, 'var'))   # getattr(o1, 'var')  =equivalent to=  o1.var
@@ -200,6 +284,7 @@ print(o5.magic)             # __getattr__ has the lowest priority to find magic
 
 
 print("\n\n")
+#for attribute in dir(o5):
 for attribute in show_selected:
     print(f"\n{attribute}")
     pprint(getattr(o5, attribute)) 

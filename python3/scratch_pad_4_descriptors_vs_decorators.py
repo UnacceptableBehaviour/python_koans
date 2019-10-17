@@ -92,32 +92,38 @@ def print_message(message):
                                                            #  
 print_message("Welcome to the")                 # Welcome to the Outer limits
 
+print("\n:\n:1")
 
 # # # # # # # # # # # # # # # # # # # # # # # #
 # implementin a decorator
 def uppercase_decorator(function):
     def wrapper():
-        func = function()
-        make_uppercase = func.upper()
-        return make_uppercase
+        func = function()                   # get result of wrapped function
+        make_uppercase = func.upper()       # do wrapper activities on output
+        return make_uppercase               # return the output
 
-    return wrapper
+    print("wrapper function:", wrapper)     # wrapper function: <function uppercase_decorator.<locals>.wrapper at 0x10650b9e0>
 
-@uppercase_decorator
-def say_hi():
-    return 'hello there'
+    return wrapper                          # return wrapper function
 
-print("\n= = = = = simple decorator")
-
-decorate = uppercase_decorator(say_hi)
+        # :
+        # :
+        # wrapper function: <function uppercase_decorator.<locals>.wrapper at 0x102cfd950>
+    # this is a call! output ^ can be seen after the double colons                                
+@uppercase_decorator                                        # <<
+def say_hi():                                               # 
+    return 'hello there'                                    #
+                                                            #
+print("\n= = = = = simple decorator")                       #
+                                                            #
+decorate = uppercase_decorator(say_hi)      # equivalent to ^
 print(decorate())
-
-print(say_hi())      # HELLO THERE                    # runs decorator - other code still works!
+print(say_hi())      # HELLO THERE          # runs decorator - other code still works!
 print()
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# stacking decorators - not sure if this is good practice but it in the example
+# stacking decorators - not sure if this is good practice but its in the example
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 pancakes_w_each = '''200g flour     # sieved
@@ -162,8 +168,8 @@ def split_recipe_into_lines(f):
     return wrapper
 
 
-@split_lines_into_qty_ingredient_prep
-@split_recipe_into_lines
+@split_lines_into_qty_ingredient_prep       # 2nd
+@split_recipe_into_lines                    # 1st execute in ascending order
 def get_recipe():
     data_stream = pancakes
     return data_stream
@@ -221,11 +227,85 @@ def get_word_from_recipe(recipe):
 def get_word_from_recipe_d(recipe):
     return get_word_from_recipe(recipe)
     
-print("\n= = = = = decorator - with arguments")
+print("\n= = = = = decorator - with arguments = = = = = = = = = = = = = = = = = = = = ")
+print("undecorated")
+print(get_word_from_recipe(pancakes_w_each))
+
+print("\n\ndecorated")
+print(get_word_from_recipe_d(pancakes_w_each))
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# using a class to decorate
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# from https://github.com/GrahamDumpleton/wrapt/blob/master/blog/01-how-you-implemented-your-python-decorator-is-wrong.md
+#
+# class function_wrapper(object):
+#     def __init__(self, wrapped):
+#         self.wrapped = wrapped
+#     def __call__(self, *args, **kwargs):
+#         return self.wrapped(*args, **kwargs)
+# 
+# @function_wrapper
+# def function():
+#     pass
+
+class split_and_downcase_freq_c(object):
+    
+    def __init__(self, wrapped):
+        print("__init__", self, wrapped)
+        # __init__ <__main__.split_and_downcase_freq_c object at 0x10b514250> <function get_word_from_recipe_c at 0x10b6e2170>
+        self.wrapped = wrapped
+    
+    def __call__(self, *args, **kwargs):
+        print('__call__ entry')
+        print(self)
+        print('*args')
+        if len(args):       pprint(*args)       # if in case no args
+        print('**kwargs')
+        if kwargs.keys():   pprint(**kwargs)    # if in case no kwargs
+        print('__call__ args, kwargs printed ')
+        # wrapper code
+        
+        f_dict = get_fdict_instance()
+        # split the return using white space
+        words = self.wrapped(*args, **kwargs)   # another level of call required?
+        #           ^
+        # call function being wrapped
+        
+        for word in words:
+            if word in f_dict:
+                f_dict[word] += 1
+            else:
+                f_dict[word] = 1
+        
+        print("--------found these words-------S")
+        pprint(f_dict)
+        print("--------found these words-------E")                
+        print('__call__ exit')
+        return self.wrapped(*args, **kwargs)
+
+
+
+# pic subset of interest / order too
+show_selected = ['__call__','__init__','__weakref__','__dict__']    
+for attribute in show_selected:
+#for attribute in dir(split_and_downcase_freq_c):    # use this to look at ALL FIRST
+    print(f"\n{attribute}")
+    pprint(getattr(split_and_downcase_freq_c, attribute)) 
+
+
+print("\n:\n:decorate < < < ")
+@split_and_downcase_freq_c
+def get_word_from_recipe_c(recipe):
+    return get_word_from_recipe(recipe)
+
+
+print("\n= = = = = decorator class version - with arguments = = = = = = = = = = = = = = = = = = = = ")
 print("undecorated")
 print(get_word_from_recipe(pancakes_w_each))
 
 
 print("\n\ndecorated")
-print(get_word_from_recipe_d(pancakes_w_each))
+print(get_word_from_recipe_c(pancakes_w_each))
 
