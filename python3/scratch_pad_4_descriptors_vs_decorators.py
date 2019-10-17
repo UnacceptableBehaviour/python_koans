@@ -356,4 +356,31 @@ proxy_image2.display_image() # loading necessary
 proxy_image2.display_image() # loading unnecessary
 proxy_image1.display_image() # loading unnecessary
 
-   
+
+
+print("\n:\n:\n:PROXY-2")
+
+# not sure what the extra proxy class buys you in this case? 
+
+class ProxyImage2:                 # NO inherit Proxy
+    def __init__( self, subject ):
+        print("ProxyImage2.__init__", type(subject))
+        self._subject = subject             # hold image ref (whatever is being proxied)
+        self._proxystate = None             # loaded or not
+
+    def display_image( self ):
+        if self._proxystate == None:        # if not loaded
+            self._subject.load_image_from_disk()    # LOAD IT
+            self._proxystate = 1                    # set state to LOADED
+        self._subject.display_image()               # display
+        
+        
+print("\n= = = = = simple proxy pattern - caching  V2= = = = = = = = = = = = = = = = = = = = ")
+proxy_image1 = ProxyImage2 ( Image("Veggie Fennel & Orange Pate") )
+proxy_image2 = ProxyImage2 ( Image("Sword Fish and White Wine butter Gravy & Chips") )
+
+proxy_image1.display_image() # loading necessary
+proxy_image1.display_image() # loading unnecessary
+proxy_image2.display_image() # loading necessary
+proxy_image2.display_image() # loading unnecessary
+proxy_image1.display_image() # loading unnecessary        
