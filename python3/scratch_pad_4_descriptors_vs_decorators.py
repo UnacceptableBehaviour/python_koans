@@ -191,10 +191,10 @@ def get_fdict_instance():
 def split_and_downcase_freq(function):
     f_dict = get_fdict_instance()               # wrapper code has access to this
     
-    def wrapper(text_arg):
+    def wrapper(*args, **kwargs):
                 
         # split the return using white space
-        words = function(text_arg)
+        words = function(*args, **kwargs)
         #           ^
         # call function being wrapped
         
@@ -265,25 +265,28 @@ class split_and_downcase_freq_c(object):
         print('**kwargs')
         if kwargs.keys():   pprint(**kwargs)    # if in case no kwargs
         print('__call__ args, kwargs printed ')
-        # wrapper code
-        
+        # wrapper code        
         f_dict = get_fdict_instance()
-        # split the return using white space
-        words = self.wrapped(*args, **kwargs)   # another level of call required?
-        #           ^
-        # call function being wrapped
-        
-        for word in words:
-            if word in f_dict:
-                f_dict[word] += 1
-            else:
-                f_dict[word] = 1
-        
-        print("--------found these words-------S")
-        pprint(f_dict)
-        print("--------found these words-------E")                
+        def wrapper(*args, **kwargs):
+            # split the return using white space
+            words = self.wrapped(*args, **kwargs)   # another level of call required?
+            #           ^
+            # call function being wrapped
+            
+            for word in words:
+                if word in f_dict:
+                    f_dict[word] += 1
+                else:
+                    f_dict[word] = 1
+            
+            print("--------found these words-------S")
+            pprint(f_dict)
+            print("--------found these words-------E")                
+            
+            return words
+
         print('__call__ exit')
-        return self.wrapped(*args, **kwargs)
+        return wrapper(*args, **kwargs)
 
 
 
