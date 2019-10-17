@@ -265,6 +265,7 @@ class split_and_downcase_freq_c(object):
         print('**kwargs')
         if kwargs.keys():   pprint(**kwargs)    # if in case no kwargs
         print('__call__ args, kwargs printed ')
+        
         # wrapper code        
         f_dict = get_fdict_instance()
         def wrapper(*args, **kwargs):
