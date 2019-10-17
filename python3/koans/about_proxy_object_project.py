@@ -34,17 +34,23 @@
 # Object Proxying Recipe - Active State
 # http://code.activestate.com/recipes/496741-object-proxying/
 
-
 from runner.koan import *
 
 class Proxy:
     def __init__(self, target_object):
         # WRITE CODE HERE
-
+        
         #initialize '_obj' attribute last. Trust me on this!
+        print("Proxy.__init__ S")
         self._obj = target_object
+        print("Proxy.__init__ E")
 
     # WRITE CODE HERE
+    def __getattribute__(self, name):
+        #print("Proxy.__getattribute__", self, name, self._obj)
+        print("Proxy.__getattribute__", self, name)
+        #return getattr(self._obj, name)()
+        
 
 # The proxy object should pass the following Koan:
 #
@@ -52,7 +58,7 @@ class AboutProxyObjectProject(Koan):
     def test_proxy_method_returns_wrapped_object(self):
         # NOTE: The Television class is defined below
         tv = Proxy(Television())
-
+        print("AboutProxyObjectProject.isinstance(tv, Proxy)", isinstance(tv, Proxy))
         self.assertTrue(isinstance(tv, Proxy))
 
     def test_tv_methods_still_perform_their_function(self):
@@ -119,28 +125,36 @@ class AboutProxyObjectProject(Koan):
 # Example class using in the proxy testing above.
 class Television:
     def __init__(self):
+        print("Television.__init__", self)
         self._channel = None
         self._power = None
 
     @property
     def channel(self):
+        print("Television.channel R")
         return self._channel
 
     @channel.setter
     def channel(self, value):
+        print("Television.channel W:", value)
         self._channel = value
 
-    def power(self):
+    def power(self):        
         if self._power == 'on':
+            print("Television.OFF")
             self._power = 'off'
         else:
+            print("Television.ON")
             self._power = 'on'
 
     def is_on(self):
-        return self._power == 'on'
+        on = (self._power == 'on')
+        print("Television. ON:", on)
+        return on
 
 # Tests for the Television class.  All of theses tests should pass.
 class TelevisionTest(Koan):
+    
     def test_it_turns_on(self):
         tv = Television()
 
@@ -173,3 +187,18 @@ class TelevisionTest(Koan):
 
         tv.channel = 11
         self.assertEqual(11, tv.channel)
+
+
+
+    
+    # def __instancecheck__(obj_inst, class_info):
+    #     '''
+    #     implement isInstance - Return true if the object argument is an instance of the classinfo argument,
+    #     or of a (direct, indirect or virtual) subclass thereof. If object is not an object of the given type,
+    #     the function always returns false. . . . Helps to know what youre aiming for!
+    #     https://www.python.org/dev/peps/pep-3119/#overloading-isinstance-and-issubclass
+    #     I says example is NAIVELY SIMPLE . .
+    #     any(iterable) - Return True if any element of the iterable is true.
+    #     '''
+    #     print("Proxy.__instancecheck__")
+    #     return false #isinstance(obj_inst, class_info)     # solution simpler than I thought, 

@@ -245,11 +245,24 @@ https://www.youtube.com/watch?v=EKC_jcFH98o
 
 
 ## L36 - Proxy classes
-Proxy Pattern  - Intermediary Interface 
+Proxy Pattern  - Intermediary Interface (Remote / Cache / Interface Security)
 https://refactoring.guru/design-patterns/proxy  
+
+Simple Proxy Example
+https://www.tutorialspoint.com/python_design_patterns/python_design_patterns_proxy.htm
+
+Python Proxy - Example using vending machine
+https://renzo.lucioni.xyz/python-proxy-classes/
 
 Object Proxying Recipe - Active State
 http://code.activestate.com/recipes/496741-object-proxying/
+
+Proxy Object Module - wrapt (w/ C extension and pure python fallback)
+https://pypi.org/project/wrapt/  -  pip install wrapt
+https://wrapt.readthedocs.io/en/latest/
+A lot of info in the blog posts. . 
+https://github.com/GrahamDumpleton/wrapt/blob/master/blog/01-how-you-implemented-your-python-decorator-is-wrong.md
+
 
 Proxy Pattern Python  
 https://refactoring.guru/design-patterns/proxy/python/example  
@@ -257,10 +270,14 @@ https://refactoring.guru/design-patterns/proxy/python/example
 Inspect Module
 https://docs.python.org/3/library/inspect.html
 
-Proxy Object Module - wrapt (w/ C extension and pure python fallback)
-https://pypi.org/project/wrapt/  -  pip install wrapt
-https://wrapt.readthedocs.io/en/latest/
-https://github.com/GrahamDumpleton/wrapt/blob/master/blog/01-how-you-implemented-your-python-decorator-is-wrong.md
+PEP 3119 - Introducing Abstract Base Classes
+https://www.python.org/dev/peps/pep-3119/
+Includes the specification for customizing isinstance() and issubclass() behavior 
+through __instancecheck__() and __subclasscheck__(), 
+Motivation for this functionality in the context of adding Abstract Base Classes
+
+
+
 
 
 ### Python debugger
@@ -276,6 +293,8 @@ more . . .
 ## Design Patterns in Python
 https://www.tutorialspoint.com/python_design_patterns/python_design_patterns_singleton.htm
 
+## More design patterns - Python2? / Ruby C++ / more
+https://refactoring.guru/design-patterns
 
 ## Other koans on github
 https://github.com/ahmdrefat/awesome-koans/blob/master/koans-en.md

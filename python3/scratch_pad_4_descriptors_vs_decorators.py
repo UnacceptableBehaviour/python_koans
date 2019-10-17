@@ -313,3 +313,47 @@ print(get_word_from_recipe(pancakes_w_each))
 print("\n\ndecorated")
 print(get_word_from_recipe_c(pancakes_w_each))
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# implementing a simple proxy - caching
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# 
+# from: 
+# https://www.tutorialspoint.com/python_design_patterns/python_design_patterns_proxy.htm
+#
+print("\n:\n:\n:PROXY")
+
+class Image:
+    def __init__( self, filename ):
+        self._filename = filename
+
+    def load_image_from_disk( self ):
+        print("loading " + self._filename )
+
+    def display_image( self ):
+        print("display " + self._filename)
+
+class Proxy:
+    def __init__( self, subject ):
+        print("Proxy.__init__", type(subject))
+        self._subject = subject             # hold image ref (whatever is being proxied)
+        self._proxystate = None             # loaded or not
+
+class ProxyImage( Proxy ):                  # inherit Proxy
+    def display_image( self ):
+        if self._proxystate == None:        # if not loaded
+            self._subject.load_image_from_disk()    # LOAD IT
+            self._proxystate = 1                    # set state to LOADED
+        self._subject.display_image()               # display 
+
+
+print("\n= = = = = simple proxy pattern - caching = = = = = = = = = = = = = = = = = = = = ")
+proxy_image1 = ProxyImage ( Image("Croissant") )
+proxy_image2 = ProxyImage ( Image("Short Rib w/ Picant Red Pepper Pure") )
+
+proxy_image1.display_image() # loading necessary
+proxy_image1.display_image() # loading unnecessary
+proxy_image2.display_image() # loading necessary
+proxy_image2.display_image() # loading unnecessary
+proxy_image1.display_image() # loading unnecessary
+
+   
