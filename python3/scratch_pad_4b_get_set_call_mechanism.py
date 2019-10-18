@@ -245,6 +245,7 @@ class O5(O4):
             print("O5__getattribute__ E")
             
             return super(O5, self).__getattribute__(name) # use normal access
+                #          super().__getattribute__(name) # python3+
 
         return "__getattribute__ has the highest priority eep {}".format(name)
 

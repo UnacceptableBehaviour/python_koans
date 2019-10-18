@@ -276,7 +276,9 @@ Includes the specification for customizing isinstance() and issubclass() behavio
 through __instancecheck__() and __subclasscheck__(), 
 Motivation for this functionality in the context of adding Abstract Base Classes
 
-
+Slots __slots__, sys getsizeof, timit
+Optimising for memory & speed
+https://stackoverflow.com/questions/472000/usage-of-slots
 
 
 

@@ -36,20 +36,47 @@
 
 from runner.koan import *
 
-class Proxy:
+print("Loading script: class Proxy:")
+
+class Proxy: #(object):                            
+    #__slots__ = ["_obj", "__weakref__"]     # replace __disct__ so __setattr__ can find _obj
+    
     def __init__(self, target_object):
         # WRITE CODE HERE
+        object.__setattr__(self, 'messages', [])
+        
+        #print("Proxy.messages", self.messages)
+        print("Proxy.messages", object.__getattribute__(self, 'messages'))
         
         #initialize '_obj' attribute last. Trust me on this!
         print("Proxy.__init__ S")
-        self._obj = target_object
+        # self._obj = target_object   # << AttributeError: 'Proxy' object has no attribute '_obj'
+        object.__setattr__(self, '_obj', target_object)
         print("Proxy.__init__ E")
 
     # WRITE CODE HERE
     def __getattribute__(self, name):
-        #print("Proxy.__getattribute__", self, name, self._obj)
-        print("Proxy.__getattribute__", self, name)
-        #return getattr(self._obj, name)()
+        print("__getattribute__", name)
+        if name == 'messages':
+            return object.__getattribute__(self, 'messages')
+        else:    
+            return getattr(object.__getattribute__(self, "_obj"), name)  # why doesn't this recurse?       
+    
+    # def __getattribute__(self, name):
+    #     print("Proxy.__getattribute__", self, name, self._obj)  # <<< self._obj causes recurison
+    #     print("Proxy.__getattribute__", self, name)
+    #     
+    #     if name in vars(self._obj):   <<< self._obj causes recurison
+    #         print("Proxy.__getattribute__ name in __dict__", name)
+    #         #if self._obj
+    #     #return getattr(self._obj, name)()
+    
+    def __delattr__(self, name):
+        delattr(object.__getattribute__(self, "_obj"), name)
+
+    def __setattr__(self, name, value):
+        #pass
+        setattr(object.__getattribute__(self, "_obj"), name, value)
         
 
 # The proxy object should pass the following Koan:
@@ -59,6 +86,9 @@ class AboutProxyObjectProject(Koan):
         # NOTE: The Television class is defined below
         tv = Proxy(Television())
         print("AboutProxyObjectProject.isinstance(tv, Proxy)", isinstance(tv, Proxy))
+        #print(vars(tv)) # TypeError: vars() argument must have __dict__ attribute < WTF?
+        print(tv)
+        print("AboutProxyObjectProject.isinstance(tv, Proxy) - E")
         self.assertTrue(isinstance(tv, Proxy))
 
     def test_tv_methods_still_perform_their_function(self):
