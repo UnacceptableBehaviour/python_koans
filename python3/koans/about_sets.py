@@ -45,11 +45,12 @@ class AboutSets(Koan):
     def test_set_have_arithmetic_operators(self):
         scotsmen = {'MacLeod', 'Wallace', 'Willie'}
         warriors = {'MacLeod', 'Wallace', 'Leonidas'}
-
-        self.assertEqual({'Willie'}, scotsmen - warriors)                                    # difference
-        self.assertEqual({'Leonidas', 'MacLeod', 'Wallace', 'Willie'}, scotsmen | warriors)  # union
-        self.assertEqual({'MacLeod', 'Wallace'}, scotsmen & warriors)                        # intersection
-        self.assertEqual({'Leonidas', 'Willie'}, scotsmen ^ warriors)                        # symmetric difference
+                                                                                             # non-commutative?
+        self.assertEqual({'Willie'}, scotsmen - warriors)                                    # difference - has direction A-B B-A
+        self.assertEqual({'Leonidas', 'MacLeod', 'Wallace', 'Willie'}, scotsmen | warriors)  # union                (U)
+        self.assertEqual({'MacLeod', 'Wallace'}, scotsmen & warriors)                        # intersection         (upside down U)
+        self.assertEqual({'Leonidas', 'Willie'}, scotsmen ^ warriors)                        # symmetric difference (sign is delta)
+                                                                                             # both side sides intead of one 
 
     # ------------------------------------------------------------------
 

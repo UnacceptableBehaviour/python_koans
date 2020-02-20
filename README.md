@@ -280,8 +280,6 @@ Slots __slots__, sys getsizeof, timit
 Optimising for memory & speed
 https://stackoverflow.com/questions/472000/usage-of-slots
 
-
-
 ### Python debugger
 https://docs.python.org/3/library/pdb.html
 Quick and dirty how to
