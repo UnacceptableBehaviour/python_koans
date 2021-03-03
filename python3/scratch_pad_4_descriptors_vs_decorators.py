@@ -95,7 +95,7 @@ print_message("Welcome to the")                 # Welcome to the Outer limits
 print("\n:\n:1")
 
 # # # # # # # # # # # # # # # # # # # # # # # #
-# implementin a decorator
+# implementing a decorator
 def uppercase_decorator(function):
     def wrapper():
         func = function()                   # get result of wrapped function
@@ -198,7 +198,7 @@ def split_and_downcase_freq(function):
         #           ^
         # call function being wrapped
         
-        for word in words:
+        for word in words:                      # can use collections.Counter for this
             if word in f_dict:
                 f_dict[word] += 1
             else:
@@ -303,6 +303,7 @@ print("\n:\n:decorate < < < ")
 @split_and_downcase_freq_c
 def get_word_from_recipe_c(recipe):
     return get_word_from_recipe(recipe)
+    
 
 
 print("\n= = = = = decorator class version - with arguments = = = = = = = = = = = = = = = = = = = = ")
@@ -312,6 +313,29 @@ print(get_word_from_recipe(pancakes_w_each))
 
 print("\n\ndecorated")
 print(get_word_from_recipe_c(pancakes_w_each))
+
+
+# function memoizing - TODO - add notes - example code
+#@cache
+#def get_some_data(from_source, search)
+class cache(object):
+
+    def __init__(self, fn):
+        self.fn = fn
+        self._cache = {}
+        functools.update_wrapper(self, fn)
+
+    def __call__(self, *args, **kwargs):
+        key = str(args) + str(kwargs)
+        if key in self._cache:
+            ret = self._cache[key]
+        else:
+            ret = self._cache[key] = self.fn(*args, **kwargs)
+
+        return ret
+
+    def clear_cache(self):
+        self._cache = {}
 
 
 # Proxy move to scratch_pad_7_proxy_pattern.py
